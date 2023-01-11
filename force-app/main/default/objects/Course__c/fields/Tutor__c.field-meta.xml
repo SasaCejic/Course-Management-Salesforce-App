@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tutor__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <description>Reference to the Tutor who will be leading the course. The records available for
+the selection here should only be Person of type Tutor</description>
+    <externalId>false</externalId>
+    <label>Tutor</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>Person__c.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Tutor</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>Person__c</referenceTo>
+    <relationshipLabel>Courses</relationshipLabel>
+    <relationshipName>Courses</relationshipName>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

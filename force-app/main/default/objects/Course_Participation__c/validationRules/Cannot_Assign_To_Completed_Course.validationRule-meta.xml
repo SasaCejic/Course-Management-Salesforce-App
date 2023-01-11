@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cannot_Assign_To_Completed_Course</fullName>
+    <active>true</active>
+    <errorConditionFormula>Course__r.End_Date__c &lt;=  TODAY() ||  Course__r.Completed__c = TRUE</errorConditionFormula>
+    <errorMessage>You cannot assign anyone to a completed course</errorMessage>
+</ValidationRule>

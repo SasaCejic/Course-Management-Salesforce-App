@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Active_Courses</fullName>
+    <columns>NAME</columns>
+    <columns>Name__c</columns>
+    <columns>Tutor__c</columns>
+    <columns>Start_Date__c</columns>
+    <columns>End_Date__c</columns>
+    <columns>Attendees_Count__c</columns>
+    <columns>Attendees_Quota__c</columns>
+    <columns>Available_Seats__c</columns>
+    <filterScope>Mine</filterScope>
+    <filters>
+        <field>Started__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>Completed__c</field>
+        <operation>equals</operation>
+        <value>0</value>
+    </filters>
+    <label>Active Courses</label>
+</ListView>

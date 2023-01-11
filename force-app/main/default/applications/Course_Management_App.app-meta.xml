@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <label>Course Management App</label>
+    <navType>Standard</navType>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Student_Record_Page</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Person__c</pageOrSobjectType>
+        <recordType>Person__c.Student</recordType>
+        <type>Flexipage</type>
+        <profile>Student User</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Student_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Person__c</pageOrSobjectType>
+        <recordType>Person__c.Student</recordType>
+        <type>Flexipage</type>
+        <profile>Student User</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Student_Record_Page</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Person__c</pageOrSobjectType>
+        <recordType>Person__c.Student</recordType>
+        <type>Flexipage</type>
+        <profile>Tutor User</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Student_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Person__c</pageOrSobjectType>
+        <recordType>Person__c.Student</recordType>
+        <type>Flexipage</type>
+        <profile>Tutor User</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Tutor_Record_Page</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Person__c</pageOrSobjectType>
+        <recordType>Person__c.Tutor</recordType>
+        <type>Flexipage</type>
+        <profile>Student User</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Tutor_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Person__c</pageOrSobjectType>
+        <recordType>Person__c.Tutor</recordType>
+        <type>Flexipage</type>
+        <profile>Student User</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Tutor_Record_Page</content>
+        <formFactor>Small</formFactor>
+        <pageOrSobjectType>Person__c</pageOrSobjectType>
+        <recordType>Person__c.Tutor</recordType>
+        <type>Flexipage</type>
+        <profile>Tutor User</profile>
+    </profileActionOverrides>
+    <profileActionOverrides>
+        <actionName>View</actionName>
+        <content>Tutor_Record_Page</content>
+        <formFactor>Large</formFactor>
+        <pageOrSobjectType>Person__c</pageOrSobjectType>
+        <recordType>Person__c.Tutor</recordType>
+        <type>Flexipage</type>
+        <profile>Tutor User</profile>
+    </profileActionOverrides>
+    <tabs>Course__c</tabs>
+    <tabs>Person__c</tabs>
+    <tabs>Assignment__c</tabs>
+    <tabs>Solution__c</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Course_Management_App_UtilityBar</utilityBar>
+</CustomApplication>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Students</fullName>
+    <columns>NAME</columns>
+    <columns>Email__c</columns>
+    <columns>Phone__c</columns>
+    <columns>Passing_Credit_Threshold__c</columns>
+    <columns>Outstanding_Credits__c</columns>
+    <columns>Passing_Score_Threshold__c</columns>
+    <columns>Assignment_Score__c</columns>
+    <columns>Outstanding_Score__c</columns>
+    <columns>All_Time_Course_Count__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Person__c.Student</value>
+    </filters>
+    <label>All Students</label>
+</ListView>

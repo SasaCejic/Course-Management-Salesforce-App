@@ -1,0 +1,18 @@
+<messaging:emailTemplate subject="Course has been Edited" recipientType="User" relatedToType="Course__c">
+<messaging:plainTextEmailBody >
+
+Hello. Your Course has been edited.
+
+Course name: {!relatedTo.Name__c} 
+Description: {!relatedTo.Description__c} 
+Tutor: {!relatedTo.Tutor__r.First_Name__c}
+Start Date: {!relatedTo.Start_Date__c}
+End Date: {!relatedTo.End_Date__c}
+Credit: {!relatedTo.Credit__c}
+Attendees Quota: {!relatedTo.Attendees_Quota__c}
+Attendees Count: {!relatedTo.Attendees_Count__c}
+Available Seats: {!relatedTo.Available_Seats__c}
+
+
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

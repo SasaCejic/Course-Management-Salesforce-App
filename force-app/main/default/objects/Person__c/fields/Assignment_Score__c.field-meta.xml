@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Assignment_Score__c</fullName>
+    <description>The sum of the Score of all Solutions</description>
+    <externalId>false</externalId>
+    <label>Assignment Score</label>
+    <summarizedField>Solution__c.Score__c</summarizedField>
+    <summaryForeignKey>Solution__c.Student__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

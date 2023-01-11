@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Prevent_Comleted_Checkbox_From_Uncheck</fullName>
+    <active>true</active>
+    <errorConditionFormula>ISCHANGED( Completed__c )  &amp;&amp;   PRIORVALUE( Completed__c )  = TRUE</errorConditionFormula>
+    <errorMessage>You are not able to uncheck the Completed checkbox</errorMessage>
+</ValidationRule>

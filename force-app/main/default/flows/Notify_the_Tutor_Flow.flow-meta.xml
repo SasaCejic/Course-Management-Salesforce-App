@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Notify_the_Tutor_About_Course_Edit</name>
+        <label>Notify the Tutor About Course Edit</label>
+        <locationX>50</locationX>
+        <locationY>455</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>Body</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Tutor__r.Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <elementReference>$User.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Course Edited</stringValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Notify_the_Tutor_about_the_Course_Creation</name>
+        <label>Notify the Tutor about the Course Creation</label>
+        <locationX>314</locationX>
+        <locationY>455</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>Body_Create</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Tutor__r.Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <elementReference>$User.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>New Assignment</stringValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <apiVersion>56.0</apiVersion>
+    <decisions>
+        <name>Is_a_Course_Edited_or_Created</name>
+        <label>Is a Course Edited or Created</label>
+        <locationX>182</locationX>
+        <locationY>335</locationY>
+        <defaultConnector>
+            <targetReference>Notify_the_Tutor_about_the_Course_Creation</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Course_is_Edited</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Notify_the_Tutor_About_Course_Edit</targetReference>
+            </connector>
+            <label>Course is Edited</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Notify the Tutor Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Notify the Tutor Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_a_Course_Edited_or_Created</targetReference>
+        </connector>
+        <object>Course__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>Body</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your Course has been edited!
+
+Course Name: {!$Record.Name__c}
+Description: {!$Record.Description__c}
+Tutor: {!$Record.Tutor__r.First_Name__c} {!$Record.Tutor__r.Last_Name__c}
+Start Date: {!$Record.Start_Date__c}
+End Date: {!$Record.End_Date__c}
+Credit: {!$Record.Credit__c}
+Attendees Quota: {!$Record.Attendees_Quota__c}</text>
+    </textTemplates>
+    <textTemplates>
+        <name>Body_Create</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Congratulations! You have been assigned to a course!
+
+Course Name: {!$Record.Name__c}
+Description: {!$Record.Description__c}
+Tutor: {!$Record.Tutor__r.First_Name__c} {!$Record.Tutor__r.Last_Name__c}
+Start Date: {!$Record.Start_Date__c}
+End Date: {!$Record.End_Date__c}
+Credit: {!$Record.Credit__c}
+Attendees Quota: {!$Record.Attendees_Quota__c}</text>
+    </textTemplates>
+</Flow>
