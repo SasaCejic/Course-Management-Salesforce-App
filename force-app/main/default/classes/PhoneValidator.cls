@@ -5,9 +5,9 @@ public with sharing class PhoneValidator {
 
         List<Person__c> persons = new List<Person__c>();
 
-        if (Schema.sObjectType.Person__c.isAccessible()){
-            persons = [SELECT Id, Name, Phone__c FROM Person__c WHERE Id = :personId];
-        }
+        
+        persons = [SELECT Id, Name, Phone__c FROM Person__c WHERE Id = :personId];
+        
 
 
         if(!persons.isEmpty()){
@@ -16,7 +16,13 @@ public with sharing class PhoneValidator {
             Http http = new Http();
             HttpRequest request = new HttpRequest();
 
-            String endpointUrl = p.Phone__c != null ? 'https://api.addressy.com/PhoneNumberValidation/Interactive/Validate/v2.20/json3.ws?Key=' + Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c + '&Phone=' + p.Phone__c : 'https://api.addressy.com/PhoneNumberValidation/Interactive/Validate/v2.20/json3.ws?Key=' + Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c;
+            String template = 'https://api.addressy.com/PhoneNumberValidation/Interactive/Validate/v2.20/json3.ws?Key={0}&Phone={1}';
+
+            List<Object> parameters = new List<Object>{Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c, p.Phone__c};
+
+            String endpointUrl = String.format(template, parameters);
+
+            //String endpointUrl = p.Phone__c != null ? 'https://api.addressy.com/PhoneNumberValidation/Interactive/Validate/v2.20/json3.ws?Key=' + Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c + '&Phone=' + p.Phone__c : 'https://api.addressy.com/PhoneNumberValidation/Interactive/Validate/v2.20/json3.ws?Key=' + Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c;
         
 
             request.setEndpoint(endpointUrl);
@@ -25,13 +31,12 @@ public with sharing class PhoneValidator {
             request.setHeader('Accept','application/json');
             HttpResponse response = http.send(request);
 
+            //create the Phone_Validation_Result__c object and populate appropriate fields;
 
-            if(response.getStatusCode() == 200 && response != null){
-                
-                //create the Phone_Validation_Result__c object and populate appropriate fields;
+            Phone_Validation_Result__c pvr = new Phone_Validation_Result__c(Name = p.Name + p.Phone__c, Validated_Field_Name__c = 'Phone__c', Phone_Value__c = p.Phone__c);
+            pvr.Person__c = p.Id;
 
-                Phone_Validation_Result__c pvr = new Phone_Validation_Result__c(Name = p.Name + p.Phone__c, Validated_Field_Name__c = 'Phone__c', Phone_Value__c = p.Phone__c);
-                pvr.Person__c = p.Id;
+            if(response.getStatusCode() == 200){
 
                 JSON2Apex obj = JSON2Apex.parse(response.getBody());    
 
@@ -56,15 +61,15 @@ public with sharing class PhoneValidator {
 
                 }
 
-                //insert Phone Validation Result record
+            }else{
 
-                if(Schema.sObjectType.Phone_Validation_Result__c.isCreateable()){
-                    Database.insert(pvr, false);
-                }
+                pvr.Wrong_Response_Code_Body__c = response.getBody();
 
             }
 
-            
+            //insert Phone Validation Result record
+
+            Database.insert(pvr, false);
    
         }
         

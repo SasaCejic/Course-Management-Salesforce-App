@@ -10,7 +10,23 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>PhoneValidationTriggerController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>PhoneValidator</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>TestPhoneValidationTrigger</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>TestPhoneValidator</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>TestResponseData</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <custom>true</custom>
@@ -237,6 +253,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Phone_Validation_Result__c.Validated_Field_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Phone_Validation_Result__c.Wrong_Response_Code_Body__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
