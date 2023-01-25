@@ -2,7 +2,7 @@
 public with sharing class TestPhoneValidator {
     
     @isTest
-    static void testSendRequestWithValidPhoneNumber(){
+    static void sendRequest_SuccessfullValidationResultCreated_IfValidPhoneNumberProvided(){
         TestResponseData.generateSuccessfulResponse();
 
 
@@ -35,7 +35,7 @@ public with sharing class TestPhoneValidator {
 
 
     @isTest
-    static void testSendRequestWithoutPhoneNumber(){
+    static void sendRequest_ErrorValidationResultCreated_IfNoPhoneNumberProvided(){
         TestResponseData.generateErrorResponse();
 
 
@@ -60,6 +60,27 @@ public with sharing class TestPhoneValidator {
         System.assertEquals('The phone numbers is required.', pvr.Error_Cause__c);
         System.assertEquals('Please ensure that you supply a phone number and try again.', pvr.Error_Resolution__c);
     }
+
+    @isTest
+    static void sendRequest_InvalidResponseCodeValidationResultCreated_IfNoCode200Returned(){
+        Test.setMock(HttpCalloutMock.class, new InvalidResponseCodeHttpCalloutMock()); 
+
+        Test.startTest();
+
+        Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
+        insert person; 
+
+        PhoneValidator.sendRequest(Id.valueOf(person.Id));
+
+        Test.stopTest();
+
+        String personId = Id.valueOf(person.Id);
+
+        Phone_Validation_Result__c pvr = [SELECT Id, Wrong_Response_Code_Body__c  FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId LIMIT 1];
+
+        System.assertEquals('invalid response code', pvr.Wrong_Response_Code_Body__c);
+    }
+
 
 }
 
