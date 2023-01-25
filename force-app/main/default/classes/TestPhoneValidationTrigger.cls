@@ -105,6 +105,8 @@ public with sharing class TestPhoneValidationTrigger {
 
         insert person;
 
+        PhoneValidationTriggerController.called = false;
+
         person.Phone__c = '+381643090207';
         update person;
 

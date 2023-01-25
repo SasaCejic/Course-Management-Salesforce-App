@@ -1,11 +1,12 @@
 trigger PhoneValidationTrigger on Person__c (after insert, after update) {
 
-    
-    Person__c processingPerson = Trigger.new[0];
-    
-    if((Trigger.isInsert && processingPerson.Phone__c != NULL) || (Trigger.isUpdate && processingPerson.Phone__c != NULL && processingPerson.Phone__c != Trigger.oldMap.get(processingPerson.Id).Phone__c)){
+    if(Trigger.isInsert && PhoneValidationTriggerController.validateRecord(Trigger.new[0])){
 
-        PhoneValidator.sendRequest(Id.valueOf(processingPerson.Id));
+        PhoneValidator.sendRequest(String.valueOf(Trigger.new[0].Id));
+
+    }else if(Trigger.isUpdate && PhoneValidationTriggerController.validateRecord(Trigger.new[0], Trigger.oldMap.get(Trigger.new[0].Id))){
+
+        PhoneValidator.sendRequest(String.valueOf(Trigger.new[0].Id));
     }
     
 
