@@ -1,15 +1,23 @@
 public with sharing class PhoneValidator {
 
     @future (callout = true)
-    public static void sendRequest(String personId, String personName, String phoneNumber){
+    public static void sendRequest(String personId, String personName, String phoneNumber, String personCountry){
 
             
         Http http = new Http();
         HttpRequest request = new HttpRequest();
 
-        String template = 'https://api.addressy.com/PhoneNumberValidation/Interactive/Validate/v2.20/json3.ws?Key={0}&Phone={1}';
+        String country = '';
+        
+        if(!String.isBlank(personCountry)){
+            country = personCountry;
+        }else if(!String.isBlank(Default_Country__mdt.getInstance('Default_Country_RS').Default_Country_Field__c)){
+            country = Default_Country__mdt.getInstance('Default_Country_RS').Default_Country_Field__c;
+        }
 
-        List<Object> parameters = new List<Object>{Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c, phoneNumber};
+        String template = 'https://api.addressy.com/PhoneNumberValidation/Interactive/Validate/v2.20/json3.ws?Key={0}&Phone={1}&Country={2}';
+
+        List<Object> parameters = new List<Object>{Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c, phoneNumber, country};
 
         String endpointUrl = String.format(template, parameters);
         

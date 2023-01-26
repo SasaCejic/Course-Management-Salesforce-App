@@ -18,15 +18,15 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>ResponseHttpCalloutMock</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>TestPhoneValidationTrigger</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>TestPhoneValidator</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>TestResponseData</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <custom>true</custom>
@@ -104,6 +104,11 @@
         <editable>false</editable>
         <field>Course__c.Text_ID__c</field>
         <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Default_Country__mdt.Default_Country_Field__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -308,6 +313,9 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>Course__c-Course Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Default_Country__mdt-Default Country Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>Number_Validation_API_Key__mdt-Number Validation API Key Layout</layout>
