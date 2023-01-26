@@ -15,7 +15,7 @@ public with sharing class TestPhoneValidator {
 
         Test.stopTest();
 
-        String personId = Id.valueOf(person.Id);
+        String personId = String.valueOf(person.Id);
 
         List<Phone_Validation_Result__c> results = [SELECT Id, Phone_Number__c, Request_Processed__c, Is_Valid__c, Network_Code__c, Network_Name__c, Network_Country__c, National_Format__c, Country_Prefix__c, Number_Type__c  FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId];
 
@@ -44,11 +44,11 @@ public with sharing class TestPhoneValidator {
 
         Test.startTest();
 
-        PhoneValidator.sendRequest(Id.valueOf(person.Id));
+        PhoneValidator.sendRequest(String.valueOf(person.Id), String.valueOf(person.Name), String.valueOf(person.Phone__c));
 
         Test.stopTest();
 
-        String personId = Id.valueOf(person.Id);
+        String personId = String.valueOf(person.Id);
 
         List<Phone_Validation_Result__c> results = [SELECT Id, ErrorId__c, Error_Description__c, Error_Cause__c, Error_Resolution__c  FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId];
 
@@ -70,11 +70,11 @@ public with sharing class TestPhoneValidator {
         Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
         insert person; 
 
-        PhoneValidator.sendRequest(Id.valueOf(person.Id));
+        PhoneValidator.sendRequest(String.valueOf(person.Id), String.valueOf(person.Name), String.valueOf(person.Phone__c));
 
         Test.stopTest();
 
-        String personId = Id.valueOf(person.Id);
+        String personId = String.valueOf(person.Id);
 
         Phone_Validation_Result__c pvr = [SELECT Id, Wrong_Response_Code_Body__c  FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId LIMIT 1];
 

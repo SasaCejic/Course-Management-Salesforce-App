@@ -95,7 +95,7 @@ public with sharing class TestPhoneValidationTrigger {
 
         Test.stopTest();
 
-        String personId = Id.valueOf(person.Id);
+        String personId = String.valueOf(person.Id);
 
         List<Phone_Validation_Result__c> results = [SELECT Id FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId];
 
