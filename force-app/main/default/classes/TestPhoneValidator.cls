@@ -3,7 +3,7 @@ public with sharing class TestPhoneValidator {
     
     @isTest
     static void sendRequest_SuccessfullValidationResultCreated_IfValidPhoneNumberProvided(){
-        TestResponseData.generateSuccessfulResponse();
+        Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"PhoneNumber":"+381645063016","RequestProcessed":true,"IsValid":"Yes","NetworkCode":"03","NetworkName":"Telekom Srbija ad Beograd (mts)","NetworkCountry":"RS","NationalFormat":"064 5063016","CountryPrefix":381,"NumberType":"Mobile"}]}', 200)); 
 
 
         Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
@@ -36,8 +36,8 @@ public with sharing class TestPhoneValidator {
 
     @isTest
     static void sendRequest_ErrorValidationResultCreated_IfNoPhoneNumberProvided(){
-        TestResponseData.generateErrorResponse();
-
+        
+        Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"Error":"1001","Description":"Number Required","Cause":"The phone numbers is required.","Resolution":"Please ensure that you supply a phone number and try again."}]}', 200)); 
 
         Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
         insert person; 
@@ -63,7 +63,7 @@ public with sharing class TestPhoneValidator {
 
     @isTest
     static void sendRequest_InvalidResponseCodeValidationResultCreated_IfNoCode200Returned(){
-        Test.setMock(HttpCalloutMock.class, new InvalidResponseCodeHttpCalloutMock()); 
+        Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('invalid response code', 500)); 
 
         Test.startTest();
 

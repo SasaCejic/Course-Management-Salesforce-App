@@ -3,16 +3,13 @@ public with sharing class PhoneValidator {
     @future (callout = true)
     public static void sendRequest(String personId){
 
-        List<Person__c> persons = new List<Person__c>();
 
-        
-        persons = [SELECT Id, Name, Phone__c FROM Person__c WHERE Id = :personId];
+        Person__c p = [SELECT Id, Name, Phone__c FROM Person__c WHERE Id = :personId LIMIT 1];
         
 
 
-        if(!persons.isEmpty()){
-            Person__c p = persons[0];
-
+        if(p != NULL){
+            
             Http http = new Http();
             HttpRequest request = new HttpRequest();
 
@@ -21,8 +18,6 @@ public with sharing class PhoneValidator {
             List<Object> parameters = new List<Object>{Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c, p.Phone__c};
 
             String endpointUrl = String.format(template, parameters);
-
-            //String endpointUrl = p.Phone__c != null ? 'https://api.addressy.com/PhoneNumberValidation/Interactive/Validate/v2.20/json3.ws?Key=' + Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c + '&Phone=' + p.Phone__c : 'https://api.addressy.com/PhoneNumberValidation/Interactive/Validate/v2.20/json3.ws?Key=' + Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c;
         
 
             request.setEndpoint(endpointUrl);
@@ -70,6 +65,8 @@ public with sharing class PhoneValidator {
             //insert Phone Validation Result record
 
             Database.insert(pvr, false);
+
+            PhoneValidationTriggerController.called = true;
    
         }
         

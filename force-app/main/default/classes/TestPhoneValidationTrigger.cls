@@ -54,7 +54,7 @@ public with sharing class TestPhoneValidationTrigger {
     @isTest
     static void updatePerson_OneValidationRecordCreated_IfNumberIsNotUpdated(){
 
-        TestResponseData.generateSuccessfulResponse();
+        Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"PhoneNumber":"+381645063016","RequestProcessed":true,"IsValid":"Yes","NetworkCode":"03","NetworkName":"Telekom Srbija ad Beograd (mts)","NetworkCountry":"RS","NationalFormat":"064 5063016","CountryPrefix":381,"NumberType":"Mobile"}]}', 200)); 
 
         Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
         person.Phone__c = '+381645063016';
@@ -83,7 +83,7 @@ public with sharing class TestPhoneValidationTrigger {
     @isTest
     static void insertPerson_OneValidationRecordCreated_IfPhoneNumberProvided(){
 
-        TestResponseData.generateSuccessfulResponse();
+        Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"PhoneNumber":"+381645063016","RequestProcessed":true,"IsValid":"Yes","NetworkCode":"03","NetworkName":"Telekom Srbija ad Beograd (mts)","NetworkCountry":"RS","NationalFormat":"064 5063016","CountryPrefix":381,"NumberType":"Mobile"}]}', 200)); 
 
 
         Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
@@ -105,7 +105,7 @@ public with sharing class TestPhoneValidationTrigger {
     @isTest
     static void updatePerson_TwoValidationRecordsCreated_IfNumberIsUpdated(){
 
-        TestResponseData.generateSuccessfulResponse();
+        Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"PhoneNumber":"+381645063016","RequestProcessed":true,"IsValid":"Yes","NetworkCode":"03","NetworkName":"Telekom Srbija ad Beograd (mts)","NetworkCountry":"RS","NationalFormat":"064 5063016","CountryPrefix":381,"NumberType":"Mobile"}]}', 200)); 
 
 
         Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
@@ -133,9 +133,9 @@ public with sharing class TestPhoneValidationTrigger {
 
 
     @isTest
-    static void validateRecord_ReturnsFalse_IfYouAlreadyInsertedPersonInTheSameTransactionAndTryToInsertAgain(){
+    static void canSendTheRequest_ReturnsFalse_IfYouAlreadyInsertedPersonInTheSameTransaction(){
 
-        TestResponseData.generateSuccessfulResponse();
+        Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"PhoneNumber":"+381645063016","RequestProcessed":true,"IsValid":"Yes","NetworkCode":"03","NetworkName":"Telekom Srbija ad Beograd (mts)","NetworkCountry":"RS","NationalFormat":"064 5063016","CountryPrefix":381,"NumberType":"Mobile"}]}', 200)); 
 
 
         Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
@@ -147,31 +147,19 @@ public with sharing class TestPhoneValidationTrigger {
 
         Test.stopTest();
         
-        System.assert(!PhoneValidationTriggerController.validateRecord(person));
+        System.assert(!PhoneValidationTriggerController.canSendTheRequest(Trigger.operationType));
     }
 
     @isTest
-    static void validateRecord_ReturnsFalse_IfYouAlreadyInsertedPersonInTheSameTransactionAndTrytoUpdate(){
-
-        TestResponseData.generateSuccessfulResponse();
-
-
-        Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
-        person.Phone__c = '+381645063016';
+    static void canSendTheRequest_ReturnsFalse_IfTriggerOperationTypeIsDifferentThanAfterInsertOrAfterUpdate(){
 
         Test.startTest();
 
-        insert person;
-
-        Person__c person1 = person;
-
-        person.First_Name__c = 'New Name';
+        boolean result = PhoneValidationTriggerController.canSendTheRequest(System.TriggerOperation.BEFORE_INSERT);
 
         Test.stopTest();
         
-        System.assert(!PhoneValidationTriggerController.validateRecord(person1,person));
+        System.assert(!result);
     }
-
-
 
 }
