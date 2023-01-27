@@ -17,9 +17,8 @@ public with sharing class TestPhoneValidator {
 
         String personId = String.valueOf(person.Id);
 
-        List<Phone_Validation_Result__c> results = [SELECT Id, Phone_Number__c, Request_Processed__c, Is_Valid__c, Network_Code__c, Network_Name__c, Network_Country__c, National_Format__c, Country_Prefix__c, Number_Type__c  FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId];
+        Phone_Validation_Result__c pvr = [SELECT Id, Phone_Number__c, Request_Processed__c, Is_Valid__c, Network_Code__c, Network_Name__c, Network_Country__c, National_Format__c, Country_Prefix__c, Number_Type__c  FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId AND Validated_Field_Name__c = 'Phone__c' LIMIT 1];
 
-        Phone_Validation_Result__c pvr = results[results.size() - 1];
 
         System.assert(pvr != null);
         System.assertEquals('+381645063016', pvr.Phone_Number__c);
@@ -44,7 +43,7 @@ public with sharing class TestPhoneValidator {
 
         Test.startTest();
 
-        PhoneValidator.sendRequest(String.valueOf(person.Id), String.valueOf(person.Name), String.valueOf(person.Phone__c), String.valueOf(person.Country__c));
+        PhoneValidator.sendRequest(String.valueOf(person.Id), String.valueOf(person.Name), String.valueOf(person.Phone__c), String.valueOf(person.Work_Phone__c), String.valueOf(person.Country__c));
 
         Test.stopTest();
 
@@ -68,9 +67,10 @@ public with sharing class TestPhoneValidator {
         Test.startTest();
 
         Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
+        person.Phone__c = '+381645063016';
         insert person; 
 
-        PhoneValidator.sendRequest(String.valueOf(person.Id), String.valueOf(person.Name), String.valueOf(person.Phone__c), String.valueOf(person.Country__c));
+        PhoneValidator.sendRequest(String.valueOf(person.Id), String.valueOf(person.Name), String.valueOf(person.Phone__c), String.valueOf(person.Work_Phone__c), String.valueOf(person.Country__c));
 
         Test.stopTest();
 
@@ -102,6 +102,37 @@ public with sharing class TestPhoneValidator {
         List<Phone_Validation_Result__c> results = [SELECT Id, Phone_Number__c, Request_Processed__c, Is_Valid__c, Network_Code__c, Network_Name__c, Network_Country__c, National_Format__c, Country_Prefix__c, Number_Type__c  FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId];
 
         Phone_Validation_Result__c pvr = results[results.size() - 1];
+
+        System.assert(pvr != null);
+        System.assertEquals('+381645063016', pvr.Phone_Number__c);
+        System.assertEquals(True, pvr.Request_Processed__c);
+        System.assertEquals('Yes', pvr.Is_Valid__c);
+        System.assertEquals('03', pvr.Network_Code__c);
+        System.assertEquals('Telekom Srbija ad Beograd (mts)', pvr.Network_Name__c);
+        System.assertEquals('RS', pvr.Network_Country__c);
+        System.assertEquals('064 5063016', pvr.National_Format__c);
+        System.assertEquals(381, pvr.Country_Prefix__c);
+        System.assertEquals('Mobile', pvr.Number_Type__c);
+    }
+
+    @isTest
+    static void sendRequest_SuccessfullValidationResultCreated_IfValidWorkPhoneNumberProvided(){
+        Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"PhoneNumber":"+381645063016","RequestProcessed":true,"IsValid":"Yes","NetworkCode":"03","NetworkName":"Telekom Srbija ad Beograd (mts)","NetworkCountry":"RS","NationalFormat":"064 5063016","CountryPrefix":381,"NumberType":"Mobile"}]}', 200)); 
+
+
+        Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
+        person.Work_Phone__c = '+381645063016';
+
+        Test.startTest();
+
+        insert person; 
+
+        Test.stopTest();
+
+        String personId = String.valueOf(person.Id);
+
+        Phone_Validation_Result__c pvr = [SELECT Id, Phone_Number__c, Request_Processed__c, Is_Valid__c, Network_Code__c, Network_Name__c, Network_Country__c, National_Format__c, Country_Prefix__c, Number_Type__c  FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId AND Validated_Field_Name__c = 'Phone__c' LIMIT 1];
+
 
         System.assert(pvr != null);
         System.assertEquals('+381645063016', pvr.Phone_Number__c);

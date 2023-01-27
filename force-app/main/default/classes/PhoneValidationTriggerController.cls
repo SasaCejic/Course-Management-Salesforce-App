@@ -9,7 +9,7 @@ public with sharing class PhoneValidationTriggerController {
     
                     Person__c processingPerson= (Person__c) Trigger.new[0];
     
-                    if(String.isNotBlank(processingPerson.Phone__c)){
+                    if(String.isNotBlank(processingPerson.Phone__c) || String.isNotBlank(processingPerson.Work_Phone__c)){
                         return true;
                     }
                     return false;
@@ -20,7 +20,7 @@ public with sharing class PhoneValidationTriggerController {
                     Person__c processingPerson = (Person__c) Trigger.new[0];
                     Person__c oldRecord = (Person__c) Trigger.oldMap.get(processingPerson.Id);
                     
-                    if(String.isNotBlank(processingPerson.Phone__c) && processingPerson.Phone__c != oldRecord.Phone__c){
+                    if((String.isNotBlank(processingPerson.Phone__c) && processingPerson.Phone__c != oldRecord.Phone__c) || (String.isNotBlank(processingPerson.Work_Phone__c) && processingPerson.Work_Phone__c != oldRecord.Work_Phone__c)){
     
                         return true;
                     }

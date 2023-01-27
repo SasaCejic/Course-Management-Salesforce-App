@@ -52,7 +52,7 @@ public with sharing class TestPhoneValidationTrigger {
     }
 
     @isTest
-    static void updatePerson_OneValidationRecordCreated_IfNumberIsNotUpdated(){
+    static void updatePerson_TwoValidationRecordsCreated_IfNumberIsNotUpdated(){
 
         Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"PhoneNumber":"+381645063016","RequestProcessed":true,"IsValid":"Yes","NetworkCode":"03","NetworkName":"Telekom Srbija ad Beograd (mts)","NetworkCountry":"RS","NationalFormat":"064 5063016","CountryPrefix":381,"NumberType":"Mobile"}]}', 200)); 
 
@@ -76,12 +76,12 @@ public with sharing class TestPhoneValidationTrigger {
 
         List<Phone_Validation_Result__c> results = [SELECT Id FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId];
 
-        System.assert(results.size() == 1);
+        System.assert(results.size() == 2);
     }
 
     //Positive tests: records should be created
     @isTest
-    static void insertPerson_OneValidationRecordCreated_IfPhoneNumberProvided(){
+    static void insertPerson_TwoValidationRecordCreated_IfPhoneNumberProvided(){
 
         Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"PhoneNumber":"+381645063016","RequestProcessed":true,"IsValid":"Yes","NetworkCode":"03","NetworkName":"Telekom Srbija ad Beograd (mts)","NetworkCountry":"RS","NationalFormat":"064 5063016","CountryPrefix":381,"NumberType":"Mobile"}]}', 200)); 
 
@@ -99,11 +99,11 @@ public with sharing class TestPhoneValidationTrigger {
 
         List<Phone_Validation_Result__c> results = [SELECT Id FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId];
 
-        System.assert(results.size() == 1);
+        System.assert(results.size() == 2);
     }
 
     @isTest
-    static void updatePerson_TwoValidationRecordsCreated_IfNumberIsUpdated(){
+    static void updatePerson_FourValidationRecordsCreated_IfNumberIsUpdated(){
 
         Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"PhoneNumber":"+381645063016","RequestProcessed":true,"IsValid":"Yes","NetworkCode":"03","NetworkName":"Telekom Srbija ad Beograd (mts)","NetworkCountry":"RS","NationalFormat":"064 5063016","CountryPrefix":381,"NumberType":"Mobile"}]}', 200)); 
 
@@ -128,7 +128,7 @@ public with sharing class TestPhoneValidationTrigger {
 
         List<Phone_Validation_Result__c> results = [SELECT Id FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId];
         
-        System.assert(results.size() == 2);
+        System.assert(results.size() == 4);
     }
 
 
