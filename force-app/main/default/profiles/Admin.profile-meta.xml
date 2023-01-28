@@ -6,6 +6,10 @@
         <visible>true</visible>
     </applicationVisibilities>
     <classAccesses>
+        <apexClass>EmailService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>JSON2Apex</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -22,11 +26,19 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>ScheduledEmailNotification</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>TestPhoneValidationTrigger</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>TestPhoneValidator</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>TutorsNotifier</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <custom>false</custom>
