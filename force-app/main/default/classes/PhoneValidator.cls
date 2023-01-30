@@ -1,10 +1,8 @@
 public with sharing class PhoneValidator {
 
     @future (callout = true)
-    public static void sendRequest(String personId, String personName, String phoneNumber, String workPhoneNumber, String personCountry){
+    public static void sendRequest(String personId, String personName, String phoneNumber, String validatedFieldName, String personCountry){
 
-        List<String> numbers = new List<String>{phoneNumber, workPhoneNumber};
-        List<Phone_Validation_Result__c> validationResults = new List<Phone_Validation_Result__c>();
 
         String country = '';
         
@@ -13,12 +11,6 @@ public with sharing class PhoneValidator {
         }else if(!String.isBlank(Default_Country__mdt.getInstance('Default_Country_RS').Default_Country_Field__c)){
             country = Default_Country__mdt.getInstance('Default_Country_RS').Default_Country_Field__c;
         }
-        
-        Integer count = 0;
-
-        for(String n : numbers){
-           
-            
 
             Http http = new Http();
             HttpRequest request = new HttpRequest();
@@ -26,7 +18,7 @@ public with sharing class PhoneValidator {
 
             String template = 'https://api.addressy.com/PhoneNumberValidation/Interactive/Validate/v2.20/json3.ws?Key={0}&Phone={1}&Country={2}';
 
-            List<Object> parameters = new List<Object>{Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c, n, country};
+            List<Object> parameters = new List<Object>{Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c, phoneNumber, country};
 
             String endpointUrl = String.format(template, parameters);
         
@@ -38,7 +30,7 @@ public with sharing class PhoneValidator {
 
             //create the Phone_Validation_Result__c object and populate appropriate fields;
 
-            Phone_Validation_Result__c pvr = new Phone_Validation_Result__c(Name = personName + n, Validated_Field_Name__c = (count == 0) ? 'Phone__c' : 'Work_Phone__c', Phone_Value__c = n);
+            Phone_Validation_Result__c pvr = new Phone_Validation_Result__c(Name = personName + phoneNumber, Validated_Field_Name__c = validatedFieldName, Phone_Value__c = phoneNumber);
             pvr.Person__c = personId;
 
             if(response.getStatusCode() == 200){
@@ -57,11 +49,12 @@ public with sharing class PhoneValidator {
                     pvr.Phone_Number__c = obj.items[0].phoneNumber;
                     pvr.Request_Processed__c = obj.items[0].requestProcessed;
                     pvr.Is_Valid__c = obj.items[0].isValid;
-                    pvr.Network_Code__c = obj.items[0].networkCode;                        pvr.Network_Name__c = obj.items[0].networkName;
+                    pvr.Network_Code__c = obj.items[0].networkCode;
+                    pvr.Network_Name__c = obj.items[0].networkName;
                     pvr.Network_Country__c = obj.items[0].networkCountry;
                     pvr.National_Format__c = obj.items[0].nationalFormat;
                     pvr.Country_Prefix__c = obj.items[0].countryPrefix;
-                      pvr.Number_Type__c = obj.items[0].numberType;
+                    pvr.Number_Type__c = obj.items[0].numberType;
 
                   }
 
@@ -71,16 +64,9 @@ public with sharing class PhoneValidator {
 
             }
 
-            validationResults.add(pvr);
-        
-            count++;
-        }
-
         //insert Phone Validation Result records
 
-        Database.insert(validationResults, false);
-
-        PhoneValidationTriggerController.called = true;
+        Database.insert(pvr, false);
 
     }
 
