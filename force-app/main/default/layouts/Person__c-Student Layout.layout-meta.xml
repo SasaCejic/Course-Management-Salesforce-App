@@ -39,6 +39,10 @@
                 <behavior>Readonly</behavior>
                 <field>Outstanding_Score__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Work_Phone__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -243,6 +247,10 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>Solution__c.Student__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Phone_Validation_Result__c.Person__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

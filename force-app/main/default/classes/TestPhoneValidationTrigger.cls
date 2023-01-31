@@ -31,7 +31,7 @@ public with sharing class TestPhoneValidationTrigger {
 
         insert person;
 
-        PhoneValidationTriggerController.called = false;
+        PhoneValidationTriggerHelper.called = false;
 
         String personId = String.valueOf(person.Id);
 
@@ -63,7 +63,7 @@ public with sharing class TestPhoneValidationTrigger {
 
         insert person;
 
-        PhoneValidationTriggerController.called = false;
+        PhoneValidationTriggerHelper.called = false;
 
 
         person.First_Name__c = 'New Name';
@@ -115,7 +115,7 @@ public with sharing class TestPhoneValidationTrigger {
 
         insert person;
 
-        PhoneValidationTriggerController.called = false;
+        PhoneValidationTriggerHelper.called = false;
 
 
         person.Phone__c = '+381643090207';
@@ -133,33 +133,46 @@ public with sharing class TestPhoneValidationTrigger {
 
 
     @isTest
-    static void canSendTheRequest_ReturnsFalse_IfYouAlreadyInsertedPersonInTheSameTransaction(){
+    static void updatePerson_TwoValidationRecordsCreated_IfWorkPhoneNumberIsUpdated(){
 
         Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"PhoneNumber":"+381645063016","RequestProcessed":true,"IsValid":"Yes","NetworkCode":"03","NetworkName":"Telekom Srbija ad Beograd (mts)","NetworkCountry":"RS","NationalFormat":"064 5063016","CountryPrefix":381,"NumberType":"Mobile"}]}', 200)); 
 
 
         Person__c person = new Person__c(Name = 'FirstName LastName', First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
-        person.Phone__c = '+381645063016';
+        person.Work_Phone__c = '+381645063016';
 
         Test.startTest();
 
         insert person;
 
-        Test.stopTest();
+        PhoneValidationTriggerHelper.called = false;
+
+
+        person.Work_Phone__c = '+381643090207';
         
-        System.assert(!PhoneValidationTriggerController.canSendTheRequest(Trigger.operationType));
+        update person;
+
+        Test.stopTest();
+
+        String personId = String.valueOf(person.Id);
+
+        List<Phone_Validation_Result__c> results = [SELECT Id FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId];
+        
+        System.assert(results.size() == 2);
     }
 
+
+    
     @isTest
-    static void canSendTheRequest_ReturnsFalse_IfTriggerOperationTypeIsDifferentThanAfterInsertOrAfterUpdate(){
+    static void canSendTheRequest_DoesntSendTheRequest_IfTriggerOperationTypeIsDifferentThanAfterInsertOrAfterUpdate(){
 
         Test.startTest();
 
-        boolean result = PhoneValidationTriggerController.canSendTheRequest(System.TriggerOperation.BEFORE_INSERT);
+        PhoneValidationTriggerHelper.validate(System.TriggerOperation.BEFORE_INSERT);
 
         Test.stopTest();
         
-        System.assert(!result);
+        System.assert(PhoneValidationTriggerHelper.called);
     }
 
 }
