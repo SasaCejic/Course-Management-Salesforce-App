@@ -1,8 +1,7 @@
 public with sharing class EmailService {
     
-    public static List<Messaging.SendEmailResult> sendEmail(String address, List<String> courseNames){
+    public static Messaging.SingleEmailMessage createSingleEmailMessage(String address, List<String> courseNames){
         
-        List<Messaging.SingleEmailMessage> emailList = new List<Messaging.SingleEmailMessage>();
         List<String> addresses = new List<String>{address};
             
        	Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
@@ -17,9 +16,8 @@ public with sharing class EmailService {
 
         mail.setplaintextbody(body);
         mail.setToAddresses(addresses);
-        emailList.add(mail);
         
-        return Messaging.sendEmail(emailList);	   
+        return mail;   
 
     }
 }

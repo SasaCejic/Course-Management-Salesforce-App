@@ -1,5 +1,5 @@
 @isTest
-public with sharing class TestPhoneValidator {
+public with sharing class PhoneValidatorTest {
     
     @isTest
     static void sendRequest_SuccessfullValidationResultCreated_IfValidPhoneNumberProvided(){
@@ -43,7 +43,7 @@ public with sharing class TestPhoneValidator {
 
         Test.startTest();
 
-        PhoneValidator.sendRequest(String.valueOf(person.Id), String.valueOf(person.Name), String.valueOf(person.Phone__c), String.valueOf(person.Work_Phone__c), String.valueOf(person.Country__c));
+        PhoneValidator.sendRequest(String.valueOf(person.Id), String.valueOf(person.Name), String.valueOf(person.Phone__c), 'Phone__c', String.valueOf(person.Country__c));
 
         Test.stopTest();
 
@@ -70,7 +70,7 @@ public with sharing class TestPhoneValidator {
         person.Phone__c = '+381645063016';
         insert person; 
 
-        PhoneValidator.sendRequest(String.valueOf(person.Id), String.valueOf(person.Name), String.valueOf(person.Phone__c), String.valueOf(person.Work_Phone__c), String.valueOf(person.Country__c));
+        PhoneValidator.sendRequest(String.valueOf(person.Id), String.valueOf(person.Name), String.valueOf(person.Phone__c), 'Phone__c', String.valueOf(person.Country__c));
 
         Test.stopTest();
 
@@ -131,7 +131,7 @@ public with sharing class TestPhoneValidator {
 
         String personId = String.valueOf(person.Id);
 
-        Phone_Validation_Result__c pvr = [SELECT Id, Phone_Number__c, Request_Processed__c, Is_Valid__c, Network_Code__c, Network_Name__c, Network_Country__c, National_Format__c, Country_Prefix__c, Number_Type__c  FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId AND Validated_Field_Name__c = 'Phone__c' LIMIT 1];
+        Phone_Validation_Result__c pvr = [SELECT Id, Phone_Number__c, Request_Processed__c, Is_Valid__c, Network_Code__c, Network_Name__c, Network_Country__c, National_Format__c, Country_Prefix__c, Number_Type__c  FROM Phone_Validation_Result__c WHERE Person__r.Id = :personId AND Validated_Field_Name__c = 'Work_Phone__c' LIMIT 1];
 
 
         System.assert(pvr != null);
