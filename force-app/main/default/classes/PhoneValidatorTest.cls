@@ -1,5 +1,5 @@
 @isTest
-public with sharing class TestPhoneValidator {
+public with sharing class PhoneValidatorTest {
     
     @isTest
     static void sendRequest_SuccessfullValidationResultCreated_IfValidPhoneNumberProvided(){

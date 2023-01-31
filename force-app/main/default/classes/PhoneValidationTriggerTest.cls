@@ -1,5 +1,5 @@
 @isTest
-public with sharing class TestPhoneValidationTrigger {
+public with sharing class PhoneValidationTriggerTest {
    
     //Negative tests: records shouldn't be created
     @isTest
