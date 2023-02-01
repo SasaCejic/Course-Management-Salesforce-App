@@ -1,15 +1,5 @@
 @isTest
 public with sharing class TutorsNotifierTest {
-
-    @TestSetup
-    static void deleteEmptyCourses(){
-        List<Course__c> coursesWithoutAttendees = [SELECT ID FROM Course__c WHERE Attendees_Count__c = 0];
-
-        if(!coursesWithoutAttendees.isEmpty()){
-            delete coursesWithoutAttendees;
-        }
-    }
-    
     
    @isTest
    static void findAndNotify_ShouldSendAnEmail_IfThereIsTutorThatHasOneCourseWithoutAttendees(){
@@ -79,6 +69,10 @@ public with sharing class TutorsNotifierTest {
     Test.stopTest();
 
     System.assertEquals(5, results.size());
+
+    for(Integer i = 0; i < results.size(); i++){
+        System.assert(results[i].isSuccess());
+    }
 
    }
 
