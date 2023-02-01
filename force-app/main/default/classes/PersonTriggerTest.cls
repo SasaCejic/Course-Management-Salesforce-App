@@ -1,5 +1,5 @@
 @isTest
-public with sharing class TestPhoneValidationTrigger {
+public with sharing class PersonTriggerTest {
    
     //Negative tests: records shouldn't be created
     @isTest
@@ -31,7 +31,7 @@ public with sharing class TestPhoneValidationTrigger {
 
         insert person;
 
-        PhoneValidationTriggerHelper.called = false;
+        PersonTriggerHelper.called = false;
 
         String personId = String.valueOf(person.Id);
 
@@ -63,7 +63,7 @@ public with sharing class TestPhoneValidationTrigger {
 
         insert person;
 
-        PhoneValidationTriggerHelper.called = false;
+        PersonTriggerHelper.called = false;
 
 
         person.First_Name__c = 'New Name';
@@ -115,7 +115,7 @@ public with sharing class TestPhoneValidationTrigger {
 
         insert person;
 
-        PhoneValidationTriggerHelper.called = false;
+        PersonTriggerHelper.called = false;
 
 
         person.Phone__c = '+381643090207';
@@ -145,7 +145,7 @@ public with sharing class TestPhoneValidationTrigger {
 
         insert person;
 
-        PhoneValidationTriggerHelper.called = false;
+        PersonTriggerHelper.called = false;
 
 
         person.Work_Phone__c = '+381643090207';
@@ -161,18 +161,39 @@ public with sharing class TestPhoneValidationTrigger {
         System.assert(results.size() == 2);
     }
 
-
-    
     @isTest
-    static void canSendTheRequest_DoesntSendTheRequest_IfTriggerOperationTypeIsDifferentThanAfterInsertOrAfterUpdate(){
+    static void insertPerson_ShouldPopulateNameFieldWithFirstAndLastNameAndCheckCreatedCheckbox_WhenRecordIsCreated(){
+
+        Person__c person = new Person__c(First_Name__c = 'FirstName', Last_Name__c = 'LastName', Email__c = 'cejicsasa17@gmail.com');
 
         Test.startTest();
 
-        PhoneValidationTriggerHelper.validate(System.TriggerOperation.BEFORE_INSERT);
+        insert person;
+
+        String personId = String.valueOf(person.Id);
+
+        Person__c createdRecord = [SELECT Name, Created__c FROM Person__c WHERE Id = :personId LIMIT 1];
+
+        System.assertEquals('FirstName LastName', createdRecord.Name);
+        System.assert(createdRecord.Created__c);
+
+        Test.stopTest();
+
+    }
+
+
+
+    
+    @isTest
+    static void validate_DoesntSendTheRequest_IfTriggerOperationTypeIsDifferentThanAfterInsertOrAfterUpdateOrBeforeInsert(){
+
+        Test.startTest();
+
+        PersonTriggerHelper.validate(System.TriggerOperation.BEFORE_UPDATE);
 
         Test.stopTest();
         
-        System.assert(PhoneValidationTriggerHelper.called);
+        System.assert(PersonTriggerHelper.called);
     }
 
 }

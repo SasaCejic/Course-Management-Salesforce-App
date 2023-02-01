@@ -1,4 +1,4 @@
-public with sharing class PhoneValidationTriggerHelper {
+public with sharing class PersonTriggerHelper {
     
     public static boolean called = false;
 
@@ -22,9 +22,9 @@ public with sharing class PhoneValidationTriggerHelper {
                     }
 
                     called = true;
+
                     
-                }
-                when AFTER_UPDATE{
+                }when AFTER_UPDATE{
     
                     Person__c processingPerson = (Person__c) Trigger.new[0];
                     Person__c oldRecord = (Person__c) Trigger.oldMap.get(processingPerson.Id);
@@ -40,9 +40,16 @@ public with sharing class PhoneValidationTriggerHelper {
                         PhoneValidator.sendRequest(processingPerson.Id, processingPerson.Name, processingPerson.Work_Phone__c, 'Work_Phone__c', processingPerson.Country__c);
                         
                     }
-                
+
                     called = true;
                 
+                }when BEFORE_INSERT{
+
+                    Person__c person = (Person__c) Trigger.new[0];
+                    person.Name = String.format('{0} {1}', new List<String>{person.First_Name__c, person.Last_Name__c});
+                    person.Created__c = true;
+
+
                 }when else{
                     called = true;
                 } 
