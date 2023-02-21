@@ -32,7 +32,7 @@ const COLUMNS = [
 export default class PersonTable extends NavigationMixin (LightningElement) {
     record = {};
     columns = COLUMNS;
-    showModal = false;
+    @track showModal;
     editRecordId;
     editRecordName;
 
@@ -40,6 +40,14 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     @wire(getPersons)
     persons;
+
+    handleCloseModal(event){
+        this.showModal = event.detail;
+    }
+
+    handleErrorMessage(event){
+        this.showErrorMessage(event);
+    }
 
     handleRowAction(event) {
         const actionName = event.detail.action.name;
@@ -125,6 +133,11 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
                 mode: 'dismissable'
             })
         );
+    }
+
+    handleSendHandleSuccess(event){
+        this.editRecordId = event.detail;
+        this.handleSuccess(event);
     }
 
     handleSuccess(event){
