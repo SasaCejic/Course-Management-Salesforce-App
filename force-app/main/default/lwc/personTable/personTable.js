@@ -32,19 +32,29 @@ const COLUMNS = [
 export default class PersonTable extends NavigationMixin (LightningElement) {
     record = {};
     columns = COLUMNS;
+    @track showModal;
+    editRecordId;
+    editRecordName;
 
     @track error;
 
     @wire(getPersons)
     persons;
 
+    handleCloseModal(event){
+        this.showModal = event.detail;
+    }
+
+    handleErrorMessage(event){
+        this.showErrorMessage(event);
+    }
+
     handleRowAction(event) {
         const actionName = event.detail.action.name;
         const row = event.detail.row;
         switch (actionName) {
             case 'edit':
-                console.log('Edit row');
-                //TODO: call function for record edit
+                this.showEditRecordModal(row);
                 break;
             case 'delete':
                 this.handleConfirm(event, row);
@@ -104,5 +114,51 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
             });
     }
 
+    showEditRecordModal(row){
+        this.editRecordId = row.Id;
+        this.editRecordName = row.Name;
+        this.showModal = true;
+    }
+
+    hideModalBox(){
+        this.showModal = false;
+    }
+
+    showErrorMessage(event) {
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Error',
+                message: 'Record cannot be edited',
+                variant: 'error',
+                mode: 'dismissable'
+            })
+        );
+    }
+
+    handleSendHandleSuccess(event){
+        this.editRecordId = event.detail;
+        this.handleSuccess(event);
+    }
+
+    handleSuccess(event){
+        this.hideModalBox();
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Success',
+                message: 'Record ' + this.editRecordName + ' was updated',
+                variant: 'success',
+                mode: 'dismissable'
+            })
+        );
+        this[NavigationMixin.Navigate]({
+            type:'standard__recordPage',
+            attributes:{
+                recordId: this.editRecordId,
+                objectApiName: 'c__Person',
+                actionName: 'view'
+            }
+        });
+       
+    }
     
 }
