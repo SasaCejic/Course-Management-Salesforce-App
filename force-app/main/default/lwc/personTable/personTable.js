@@ -33,6 +33,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
     record = {};
     columns = COLUMNS;
     @track showModal;
+    @track createScreen;
     editRecordId;
     editRecordName;
 
@@ -46,7 +47,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
     }
 
     handleErrorMessage(event){
-        this.showErrorMessage(event);
+        this.showEditErrorMessage(event);
     }
 
     handleRowAction(event) {
@@ -124,7 +125,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         this.showModal = false;
     }
 
-    showErrorMessage(event) {
+    showEditErrorMessage(event) {
         this.dispatchEvent(
             new ShowToastEvent({
                 title: 'Error',
@@ -159,6 +160,50 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
             }
         });
        
+    }
+
+    showCreateScreen(){
+        this.createScreen = true;
+    }
+
+    handleCloseCreateScreen(event){
+        this.createScreen = false;
+    }
+
+    handleCreateErrorMessage(event){
+        this.showCreateErrorMessage(event);
+    }
+
+    handleSuccessCreate(event){
+        this.handleCloseCreateScreen(event);
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Success',
+                message: 'Record \'' + event.detail.recordName +'\' has been created',
+                variant: 'success',
+                mode: 'dismissable'
+            })
+        );
+        console.log('Event detail: ' + event.detail);
+        this[NavigationMixin.Navigate]({
+            type:'standard__recordPage',
+            attributes:{
+                recordId: event.detail.recordId,
+                objectApiName: 'c__Person',
+                actionName: 'view'
+            }
+        });
+    }
+
+    showCreateErrorMessage(event) {
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Error',
+                message: 'Record cannot be created',
+                variant: 'error',
+                mode: 'dismissable'
+            })
+        );
     }
     
 }

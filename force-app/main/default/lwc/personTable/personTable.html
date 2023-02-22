@@ -10,5 +10,11 @@
            </lightning-datatable>
         </template>
     </lightning-card>
-<c-edit-screen if:true={showModal} onsuccessedit = {handleSendHandleSuccess} onclosemodal = {handleCloseModal} onerrormessage = {handleErrorMessage} recordid = {editRecordId} recordname = {editRecordName} ></c-edit-screen>
+    <div class="slds-m-around_medium">
+        <lightning-button label="New Person" title="Create new Person record" class="slds-float_right" 
+            onclick = {showCreateScreen}>
+        </lightning-button>
+    </div>
+    <c-create-screen if:true={createScreen} onclosecreatescreen = {handleCloseCreateScreen} oncreateerrormessage = {handleCreateErrorMessage} onsuccesscreate = {handleSuccessCreate}></c-create-screen>
+    <c-edit-screen if:true={showModal} onsuccessedit = {handleSendHandleSuccess} onclosemodal = {handleCloseModal} onerrormessage = {handleErrorMessage} recordid = {editRecordId} recordname = {editRecordName} ></c-edit-screen>
 </template>
