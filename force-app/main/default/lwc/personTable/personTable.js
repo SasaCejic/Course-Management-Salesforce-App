@@ -5,6 +5,10 @@ import PERSON_RECORD_TYPE_FIELD from '@salesforce/schema/Person__c.Record_Type_N
 import PERSON_PHONE_FIELD from '@salesforce/schema/Person__c.Phone__c';
 import PERSON_EMAIL_FIELD from '@salesforce/schema/Person__c.Email__c';
 import getPersons from '@salesforce/apex/PersonController.getPersons';
+import LightningConfirm from 'lightning/confirm';
+import { deleteRecord } from 'lightning/uiRecordApi';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { refreshApex } from '@salesforce/apex';
 
 const actions = [
     { label: 'Edit', name: 'edit' },
@@ -28,20 +32,32 @@ const COLUMNS = [
 export default class PersonTable extends NavigationMixin (LightningElement) {
     record = {};
     columns = COLUMNS;
+    @track showModal;
+    editRecordId;
+    editRecordName;
+
+    @track error;
 
     @wire(getPersons)
     persons;
+
+    handleCloseModal(event){
+        this.showModal = event.detail;
+    }
+
+    handleErrorMessage(event){
+        this.showErrorMessage(event);
+    }
 
     handleRowAction(event) {
         const actionName = event.detail.action.name;
         const row = event.detail.row;
         switch (actionName) {
             case 'edit':
-                console.log('Edit row');
-                //TODO: call function for record edit
+                this.showEditRecordModal(row);
                 break;
             case 'delete':
-                //TODO: call function for record deletion
+                this.handleConfirm(event, row);
                 break;
             case 'urlredirect':
                 this.showRowDetails(row);
@@ -62,6 +78,87 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         });
     }
 
-    
+    async handleConfirm(event,row) {
+        const result = await LightningConfirm.open({
+            message: 'Are you sure you want to delete \"' + row.Name + '\" record?',
+            theme: 'info',
+            label: 'Confirm your action',
+        });
+        if(result){
+            this.delete(event, row);
+        }
+        
+    }
+
+    delete(event, row) {
+        deleteRecord(row.Id)
+            .then(() => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Success',
+                        message: 'Record ' + row.Id + ' deleted',
+                        variant: 'success'
+                    })
+                );
+                refreshApex(this.persons);
+
+            })
+            .catch(error => {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error deleting record',
+                        message: error.body.message,
+                        variant: 'error'
+                    })
+                );
+            });
+    }
+
+    showEditRecordModal(row){
+        this.editRecordId = row.Id;
+        this.editRecordName = row.Name;
+        this.showModal = true;
+    }
+
+    hideModalBox(){
+        this.showModal = false;
+    }
+
+    showErrorMessage(event) {
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Error',
+                message: 'Record cannot be edited',
+                variant: 'error',
+                mode: 'dismissable'
+            })
+        );
+    }
+
+    handleSendHandleSuccess(event){
+        this.editRecordId = event.detail;
+        this.handleSuccess(event);
+    }
+
+    handleSuccess(event){
+        this.hideModalBox();
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: 'Success',
+                message: 'Record ' + this.editRecordName + ' was updated',
+                variant: 'success',
+                mode: 'dismissable'
+            })
+        );
+        this[NavigationMixin.Navigate]({
+            type:'standard__recordPage',
+            attributes:{
+                recordId: this.editRecordId,
+                objectApiName: 'c__Person',
+                actionName: 'view'
+            }
+        });
+       
+    }
     
 }
