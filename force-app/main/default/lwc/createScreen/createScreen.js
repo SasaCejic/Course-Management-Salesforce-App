@@ -1,6 +1,4 @@
 import { LightningElement, track, wire } from 'lwc';
-import getFieldsFromStudentLayout from '@salesforce/apex/PersonController.getFieldsFromStudentLayout';
-import getFieldsFromTutorLayout from '@salesforce/apex/PersonController.getFieldsFromTutorLayout';
 import getStudentRecordTypeId from '@salesforce/apex/PersonController.getStudentRecordTypeId';
 import getTutorRecordTypeId from '@salesforce/apex/PersonController.getTutorRecordTypeId';
 
@@ -8,15 +6,7 @@ export default class CreateScreen extends LightningElement {
 
     showRecordTypePanel = true;
 
-    fieldsToShow = [];
-
     createdRecordName;
-
-    @wire(getFieldsFromStudentLayout)
-    studentLayoutFields;
-
-    @wire(getFieldsFromTutorLayout)
-    tutorLayoutFields;
 
     @wire(getStudentRecordTypeId)
     getStudentRecordTypeId;
@@ -63,8 +53,6 @@ export default class CreateScreen extends LightningElement {
 
     hideRecordTypePanel(){
         this.showRecordTypePanel = false;
-        
-        this.fieldsToShow = (this.recordTypeValue == 'Student') ? this.studentLayoutFields : this.tutorLayoutFields;
 
         if(typeof this.selectedRecordTypeId === 'undefined'){
             this.selectedRecordTypeId = this.getTutorRecordTypeId;
@@ -86,7 +74,7 @@ export default class CreateScreen extends LightningElement {
         }
     
     this.template
-        .querySelector('lightning-record-edit-form').submit(fields);
+        .querySelector('lightning-record-form').submit(fields);
     }
 
 }

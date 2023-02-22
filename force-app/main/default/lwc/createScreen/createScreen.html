@@ -53,25 +53,17 @@
        
            <!-- modal body start -->
            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                 
-                <lightning-record-edit-form object-api-name="Person__c"
-                 onerror = {sendCreateErrorMessage}
-                 onsuccess={sendCreateHandleSuccess}
-                 onsubmit = {onSubmitHandler}
-                 >
-                    <lightning-messages> </lightning-messages>
-                    <template for:each={fieldsToShow.data} for:item="field">
-                        <lightning-input-field id = {field} key = {field} field-name = {field}> </lightning-input-field>
-                    </template>
-                    <lightning-input-field  required = "true" field-name = "RecordTypeId" value = {selectedRecordTypeId.data} class="slds-hidden"></lightning-input-field>
-                    <lightning-button
-                        class="slds-m-top_small"
-                        type="submit"
-                        label="Create"
-                    >
-                    </lightning-button>
-                    
-                </lightning-record-edit-form>
+
+                <lightning-record-form
+                    object-api-name="Person__c"
+                    record-type-id= {selectedRecordTypeId.data}
+                    layout-type= "Full"
+                    oncancel = {sendCreateScreenValue}
+                    onerror = {sendCreateErrorMessage}
+                    onsuccess={sendCreateHandleSuccess}
+                    onsubmit = {onSubmitHandler}
+                >
+                </lightning-record-form>
             
             </div>
         
