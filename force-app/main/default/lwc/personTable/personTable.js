@@ -4,7 +4,7 @@ import PERSON_NAME_FIELD from '@salesforce/schema/Person__c.Name';
 import PERSON_RECORD_TYPE_FIELD from '@salesforce/schema/Person__c.Record_Type_Name__c';
 import PERSON_PHONE_FIELD from '@salesforce/schema/Person__c.Phone__c';
 import PERSON_EMAIL_FIELD from '@salesforce/schema/Person__c.Email__c';
-import getPersons from '@salesforce/apex/PersonController.getPersons';
+import searchPersons from '@salesforce/apex/PersonController.searchPersons';
 import LightningConfirm from 'lightning/confirm';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -39,8 +39,26 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     @track error;
 
-    @wire(getPersons)
-    persons;
+    searchTerm = '';
+
+    @wire(searchPersons, {searchTerm: '$searchTerm'})
+	persons;
+
+    handleSearchTermChange(event) {
+		
+		window.clearTimeout(this.delayTimeout);
+		const searchTerm = event.target.value;
+		
+		this.delayTimeout = setTimeout(() => {
+			this.searchTerm = searchTerm;
+		}, 300);
+	}
+	get hasResults() {
+        if(this.persons.data && this.persons.data.length > 0){
+            return true;
+        }
+        return false;
+	}
 
     handleCloseModal(event){
         this.showModal = event.detail;
