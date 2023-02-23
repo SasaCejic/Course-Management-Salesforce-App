@@ -27,7 +27,7 @@
     </div>
     <template if:false={hasResults}>
         <div class="slds-align_absolute-center slds-var-m-vertical_small">
-            There are not persons with given search parameters
+            There are no persons with given search parameters
         </div>
     </template>
     <c-create-screen if:true={createScreen} onclosecreatescreen = {handleCloseCreateScreen} oncreateerrormessage = {handleCreateErrorMessage} onsuccesscreate = {handleSuccessCreate}></c-create-screen>
