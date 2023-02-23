@@ -16,12 +16,11 @@ const actions = [
 ];
 
 const COLUMNS = [
-    { label: 'Name', fieldName: PERSON_NAME_FIELD.fieldApiName,
-     type: 'button', typeAttributes: {label: { fieldName: 'Name' }, name : 'urlredirect', variant: 'base',
-      sortable: true }},
-    { label: 'Record Type Name', fieldName: PERSON_RECORD_TYPE_FIELD.fieldApiName, type: 'text' },
-    { label: 'Phone', fieldName: PERSON_PHONE_FIELD.fieldApiName, type: 'text' },
-    { label: 'Email', fieldName: PERSON_EMAIL_FIELD.fieldApiName, type: 'text' },
+    { label: 'Name', fieldName: PERSON_NAME_FIELD.fieldApiName, sortable: true,
+     type: 'button', typeAttributes: {label: { fieldName: 'Name' }, name : 'urlredirect', variant: 'base' }},
+    { label: 'Record Type Name', fieldName: PERSON_RECORD_TYPE_FIELD.fieldApiName, type: 'text', sortable: true },
+    { label: 'Phone', fieldName: PERSON_PHONE_FIELD.fieldApiName, type: 'text', sortable: true },
+    { label: 'Email', fieldName: PERSON_EMAIL_FIELD.fieldApiName, type: 'text', sortable: true },
     {
         type: 'action',
         typeAttributes: { rowActions: actions },
@@ -44,6 +43,10 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
     @wire(searchPersons, {searchTerm: '$searchTerm'})
 	persons;
 
+    defaultSortDirection = 'asc';
+    sortDirection = 'asc';
+    sortedBy;
+
     handleSearchTermChange(event) {
 		
 		window.clearTimeout(this.delayTimeout);
@@ -59,6 +62,32 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         }
         return false;
 	}
+
+    sortBy(field, reverse, primer) {
+        const key = primer
+            ? function (x) {
+                  return primer(x[field]);
+              }
+            : function (x) {
+                  return x[field];
+              };
+
+        return function (a, b) {
+            a = key(a);
+            b = key(b);
+            return reverse * ((a > b) - (b > a));
+        };
+    }
+
+    onHandleSort(event) {
+        const { fieldName: sortedBy, sortDirection } = event.detail;
+        const cloneData = [...this.persons.data];
+
+        cloneData.sort(this.sortBy(sortedBy, sortDirection === 'asc' ? 1 : -1));
+        this.persons.data = cloneData;
+        this.sortDirection = sortDirection;
+        this.sortedBy = sortedBy;
+    }
 
     handleCloseModal(event){
         this.showModal = event.detail;
