@@ -16,6 +16,11 @@
                 data={persons.data}
                 columns={columns}
                 onrowaction={handleRowAction}
+                hide-checkbox-column
+                default-sort-direction={defaultSortDirection}
+                sorted-direction={sortDirection}
+                sorted-by={sortedBy}
+                onsort={onHandleSort}
             >
            </lightning-datatable>
         </template>
