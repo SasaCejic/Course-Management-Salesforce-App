@@ -10,4 +10,17 @@ public with sharing class PersonController {
         ];
 
     }
+
+    @AuraEnabled(cacheable = true)
+    public static String getStudentRecordTypeId(){
+        return Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Student').getRecordTypeId();
+    }
+
+    @AuraEnabled(cacheable = true)
+    public static String getTutorRecordTypeId(){
+        return Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Tutor').getRecordTypeId();
+    }
+
+
+
 }
