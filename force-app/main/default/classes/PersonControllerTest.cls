@@ -38,11 +38,15 @@ public with sharing class PersonControllerTest {
         
         System.assertEquals(3, persons.size());
 
+
         List<String> personNames  = new List<String>();
+
+
 
         for(Person__c p : persons){
           personNames.add(p.Name);
         }
+
         system.assert(personNames.contains(person1.Name));
         system.assert(personNames.contains(person2.Name));
         system.assert(personNames.contains(person3.Name));
@@ -83,6 +87,7 @@ public with sharing class PersonControllerTest {
         
         system.assert(personNames.contains(person2.Name));
         system.assert(personNames.contains(person3.Name));
+
 
    }
 
@@ -150,14 +155,18 @@ public with sharing class PersonControllerTest {
         System.assertEquals(3, persons.size());
 
 
+
         List<String> personNames  = new List<String>();
+
 
         for(Person__c p : persons){
           personNames.add(p.Name);
         }
+
         system.assert(personNames.contains(person1.Name));
         system.assert(personNames.contains(person2.Name));
         system.assert(personNames.contains(person3.Name));
+
 
    }
 
@@ -214,6 +223,8 @@ public with sharing class PersonControllerTest {
         System.assertEquals(1, persons.size());
         System.assert(persons[0].Name == person2.Name);
 
+        System.assert(persons[0].Name == person2.Name);
+
    }
 
    @isTest
@@ -240,6 +251,7 @@ public with sharing class PersonControllerTest {
         System.assertEquals(1, persons.size());
 
         System.assert(persons[0].Name == person3.Name);
+
 
    }
 
@@ -275,6 +287,7 @@ public with sharing class PersonControllerTest {
         }
         system.assert(personNames.contains(createdPersons[1].Name));
         system.assert(personNames.contains(createdPersons[2].Name));
+
 
    }
 
