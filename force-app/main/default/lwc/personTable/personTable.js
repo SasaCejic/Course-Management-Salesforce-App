@@ -1,4 +1,4 @@
-import { LightningElement, wire, track } from 'lwc';
+import { LightningElement, track } from 'lwc';
 import {NavigationMixin} from 'lightning/navigation';
 import PERSON_NAME_FIELD from '@salesforce/schema/Person__c.Name';
 import PERSON_RECORD_TYPE_FIELD from '@salesforce/schema/Person__c.Record_Type_Name__c';
@@ -40,12 +40,46 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     searchTerm = '';
 
-    @wire(searchPersons, {searchTerm: '$searchTerm'})
-	persons;
+    persons = [];
+
 
     defaultSortDirection = 'asc';
     sortDirection = 'asc';
     sortedBy;
+
+    recordSize = 0;
+    isLoading = true;
+    infiniteLoading = true;
+
+    connectedCallback(){
+        this.loadMore();
+    }
+
+    loadMore(){
+        searchPersons({searchTerm: this.searchTerm,  offset: this.recordSize})
+        .then(result => {
+            if(result.length > 0){
+                if(this.recordSize > 0){
+                    this.persons = [...this.persons, ...result];
+                }else{
+                    this.persons = result;
+                }
+            }else{
+                this.infiniteLoading = false;
+            }
+            this.isLoading = false;
+        })
+        
+        this.recordSize = this.recordSize + 10;
+    }
+
+    resetData(){
+        this.persons = [];
+        this.recordSize = 0;
+        this.isLoading = true;
+        this.infiniteLoading = true;
+    }
+   
 
     handleSearchTermChange(event) {
 		
@@ -54,10 +88,12 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 		
 		this.delayTimeout = setTimeout(() => {
 			this.searchTerm = searchTerm;
+            this.resetData();
+            this.loadMore();
 		}, 300);
 	}
 	get hasResults() {
-        if(this.persons.data && this.persons.data.length > 0){
+        if(this.persons.length > 0){
             return true;
         }
         return false;
@@ -81,10 +117,10 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     onHandleSort(event) {
         const { fieldName: sortedBy, sortDirection } = event.detail;
-        const cloneData = [...this.persons.data];
+        const cloneData = [...this.persons];
 
         cloneData.sort(this.sortBy(sortedBy, sortDirection === 'asc' ? 1 : -1));
-        this.persons.data = cloneData;
+        this.persons = cloneData;
         this.sortDirection = sortDirection;
         this.sortedBy = sortedBy;
     }
@@ -148,7 +184,8 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
                         variant: 'success'
                     })
                 );
-                refreshApex(this.persons);
+                
+                location.reload();
 
             })
             .catch(error => {

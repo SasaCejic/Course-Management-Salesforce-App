@@ -1,12 +1,14 @@
 public with sharing class PersonController {
     @AuraEnabled(cacheable = true)
-    public static List<Person__c> getPersons(){
+    public static List<Person__c> getPersons( Integer offset){
         
         return [
             SELECT Name, Record_Type_Name__c, Phone__c, Email__c
             FROM Person__c
             WITH SECURITY_ENFORCED
             ORDER BY Name
+            LIMIT 10
+            OFFSET :Integer.valueOf(offset)
         ];
 
     }
@@ -22,11 +24,11 @@ public with sharing class PersonController {
     }
 
     @AuraEnabled(cacheable = true)
-    public static List<Person__c> searchPersons(String searchTerm){
+    public static List<Person__c> searchPersons(String searchTerm, Integer offset){
         searchTerm = searchTerm.trim();
 
         if (searchTerm == '') {
-            return getPersons();
+            return getPersons(offset);
         }
 
         searchTerm = '%' + searchTerm + '%';
@@ -37,9 +39,9 @@ public with sharing class PersonController {
             WHERE Name LIKE :searchTerm OR Phone__c LIKE :searchTerm OR Email__c LIKE :searchTerm
             WITH SECURITY_ENFORCED
             ORDER BY Name
+            LIMIT 10
+            OFFSET :Integer.valueOf(offset)
         ];
     }
-
-
 
 }

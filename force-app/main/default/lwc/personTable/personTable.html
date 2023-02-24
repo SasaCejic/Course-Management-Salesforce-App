@@ -1,6 +1,6 @@
 <template>
     <lightning-card>
-        <template if:true={persons.data}>
+        <template if:true={persons}>
 
             <lightning-input type="search"
 	            onchange={handleSearchTermChange}
@@ -10,19 +10,24 @@
 	            placeholder="Search for persons"
 	            value={searchTerm}>
             </lightning-input>
-
+        <div style = "height: 300px">
             <lightning-datatable
                 key-field="Id"
-                data={persons.data}
+                data={persons}
                 columns={columns}
                 onrowaction={handleRowAction}
                 hide-checkbox-column
+                show-row-number-column
                 default-sort-direction={defaultSortDirection}
                 sorted-direction={sortDirection}
                 sorted-by={sortedBy}
                 onsort={onHandleSort}
+                enable-infinite-loading={infiniteLoading}
+                is-loading={isLoading}
+                onloadmore={loadMore}
             >
            </lightning-datatable>
+        </div>
         </template>
     </lightning-card>
     <div class="slds-m-around_medium">
