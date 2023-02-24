@@ -55,6 +55,11 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         this.loadMore();
     }
 
+    //TODO Make this work with wire and wire parameter
+    //TODO Q: What's the difference between Wire and Imperatively calling Apex?
+    //TODO add .catch and display errors when loading of people fails
+    //TODO Q: What are these three dots and what is their main purpose?
+    //TODO Q: What's the purpose of @track and when do we need it>
     loadMore(){
         searchPersons({searchTerm: this.searchTerm,  offset: this.recordSize})
         .then(result => {
@@ -93,10 +98,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 		}, 300);
 	}
 	get hasResults() {
-        if(this.persons.length > 0){
-            return true;
-        }
-        return false;
+        return this.persons.length > 0;
 	}
 
     sortBy(field, reverse, primer) {
@@ -162,6 +164,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         });
     }
 
+    //TODO use Template Literals for string contact
     async handleConfirm(event,row) {
         const result = await LightningConfirm.open({
             message: 'Are you sure you want to delete \"' + row.Name + '\" record?',
@@ -279,6 +282,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         });
     }
 
+    //TODO extract Navigation and Toast in dedicated methods
     showCreateErrorMessage(event) {
         this.dispatchEvent(
             new ShowToastEvent({

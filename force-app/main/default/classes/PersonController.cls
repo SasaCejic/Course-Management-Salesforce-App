@@ -23,8 +23,11 @@ public with sharing class PersonController {
         return Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Tutor').getRecordTypeId();
     }
 
+    //TODO try to combine the queries for the persons into one and adding a where clause depending on the situation
     @AuraEnabled(cacheable = true)
     public static List<Person__c> searchPersons(String searchTerm, Integer offset){
+        //TODO use isBlank to avoid null pointer exception
+        //TODO sanitize the offset
         searchTerm = searchTerm.trim();
 
         if (searchTerm == '') {
@@ -33,6 +36,7 @@ public with sharing class PersonController {
 
         searchTerm = '%' + searchTerm + '%';
 
+        //TODO move query to a dedicated class
         return[
             SELECT Name, Record_Type_Name__c, Phone__c, Email__c
             FROM Person__c

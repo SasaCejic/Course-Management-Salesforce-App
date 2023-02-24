@@ -47,6 +47,7 @@ public with sharing class PersonControllerTest {
           personNames.add(p.Name);
         }
 
+       //TODO Assert by ID
         system.assert(personNames.contains(person1.Name));
         system.assert(personNames.contains(person2.Name));
         system.assert(personNames.contains(person3.Name));
@@ -199,9 +200,7 @@ public with sharing class PersonControllerTest {
 
    @isTest
    static void searchPersons_ShouldReturnOneRecord_IfOneRecordPhoneMatchesSearchParameters(){
-
-        Test.setMock(HttpCalloutMock.class, new ResponseHttpCalloutMock('{"Items":[{"PhoneNumber":"+381645063016","RequestProcessed":true,"IsValid":"Yes","NetworkCode":"03","NetworkName":"Telekom Srbija ad Beograd (mts)","NetworkCountry":"RS","NationalFormat":"064 5063016","CountryPrefix":381,"NumberType":"Mobile"}]}', 200)); 
-
+        PersonTriggerHelper.called = true;
         Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com', Phone__c = '+381 635472');
         Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com', Phone__c = '+382 908837');
         Person__c person3 = new Person__c(Name = 'Steve Owen', First_Name__c = 'Steve', Last_Name__c = 'Owen', Email__c = 'stow@gmail.com', Phone__c = '+352 116253');
@@ -257,7 +256,7 @@ public with sharing class PersonControllerTest {
 
 
    @isTest
-   static void searchPersons_ShouldReturnTwoRecords_IfThreeRecordEmailsMatchSearchParameters_AndOffsetNumberIsOne(){
+   static void searchPersons_ShouldReturnTwoRecords_IfThreeRecordEmailsMatchSearchParametersAndOffsetNumberIsOne(){
 
         Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com');
         Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com');
