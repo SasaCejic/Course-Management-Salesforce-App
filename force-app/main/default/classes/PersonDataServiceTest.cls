@@ -1,21 +1,21 @@
 @isTest
-public with sharing class PersonControllerTest {
+public with sharing class PersonDataServiceTest {
     
-   @isTest
-   static void searchPersons_shouldReturnAnEmptyLIst_ifNoRecordsAreInsertedAndSearchTermIsBlank(){
+    @isTest
+    static void getData_shouldReturnNoRecords_ifThereAreNoRecordsInDatabase(){
 
         Test.startTest();
 
-        List<Person__c> persons = PersonController.searchPersons('', 0);
+        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset', '', 0);
 
         Test.stopTest();
 
         System.assertEquals(0, persons.size());
 
-   }
+    }
 
-   @isTest
-   static void searchPersons_shouldReturnAllPersons_ifThreeRecordsAreInsertedAndSearchTermIsBlank(){
+    @isTest
+   static void getData_shouldReturnAllPersons_ifThreeRecordsAreInsertedAndSearchTermIsBlank(){
 
         Person__c person1 = new Person__c(Name = 'FirstName1 LastName1', First_Name__c = 'FirstName1', Last_Name__c = 'LastName1', Email__c = 'cejicsasa17@gmail.com');
         Person__c person2 = new Person__c(Name = 'FirstName2 LastName2', First_Name__c = 'FirstName2', Last_Name__c = 'LastName2', Email__c = 'cejicsasa17@gmail.com');
@@ -31,7 +31,7 @@ public with sharing class PersonControllerTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonController.searchPersons('', 0);
+        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset','', 0);
 
         Test.stopTest();
 
@@ -55,7 +55,7 @@ public with sharing class PersonControllerTest {
    }
 
    @isTest
-   static void searchPersons_shouldReturnOneRecord_ifOneRecordNameMatchesSearchParameters(){
+   static void getData_shouldReturnOneRecord_ifOneRecordNameMatchesSearchParameters(){
 
         Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com');
         Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com');
@@ -71,7 +71,7 @@ public with sharing class PersonControllerTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonController.searchPersons('Smith Manison', 0);
+        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WHERE Name LIKE :searchTerm OR Phone__c LIKE :searchTerm OR Email__c LIKE :searchTerm WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset','Smith Manison', 0);
 
         Test.stopTest();
 
@@ -82,7 +82,7 @@ public with sharing class PersonControllerTest {
    }
 
    @isTest
-   static void searchPersons_shouldReturnOneRecord_ifOneRecordPhoneMatchesSearchParameters(){
+   static void getData_shouldReturnOneRecord_ifOneRecordPhoneMatchesSearchParameters(){
         PersonTriggerHelper.called = true;
         Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com', Phone__c = '+381 635472');
         Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com', Phone__c = '+382 908837');
@@ -98,7 +98,7 @@ public with sharing class PersonControllerTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonController.searchPersons('+382 908837', 0);
+        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WHERE Name LIKE :searchTerm OR Phone__c LIKE :searchTerm OR Email__c LIKE :searchTerm WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset','+382 908837', 0);
 
         Test.stopTest();
 
@@ -108,12 +108,13 @@ public with sharing class PersonControllerTest {
 
    }
 
-   @isTest
-   static void searchPersons_shouldReturnOneRecord_ifOneRecordEmailMatchesSearchParameters(){
 
-        Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com');
-        Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com');
-        Person__c person3 = new Person__c(Name = 'Steve Owen', First_Name__c = 'Steve', Last_Name__c = 'Owen', Email__c = 'stow@gmail.com');
+   @isTest
+   static void getData_shouldReturnOneRecord_ifOneRecordEmailMatchesSearchParameters(){
+        PersonTriggerHelper.called = true;
+        Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com', Phone__c = '+381 635472');
+        Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com', Phone__c = '+382 908837');
+        Person__c person3 = new Person__c(Name = 'Steve Owen', First_Name__c = 'Steve', Last_Name__c = 'Owen', Email__c = 'stow@gmail.com', Phone__c = '+352 116253');
 
         List<Person__c> createdPersons = new List<Person__c>();
 
@@ -125,7 +126,7 @@ public with sharing class PersonControllerTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonController.searchPersons('stow@gmail.com', 0);
+        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WHERE Name LIKE :searchTerm OR Phone__c LIKE :searchTerm OR Email__c LIKE :searchTerm WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset','stow@gmail.com', 0);
 
         Test.stopTest();
 
@@ -133,12 +134,10 @@ public with sharing class PersonControllerTest {
 
         System.assert(persons[0].Id == person3.Id);
 
-
    }
 
-
    @isTest
-   static void searchPersons_shouldReturnTwoRecords_ifThreeRecordEmailsMatchSearchParametersAndOffsetNumberIsOne(){
+   static void getData_shouldReturnTwoRecords_ifThreeRecordEmailsMatchSearchParametersAndOffsetNumberIsOne(){
 
         Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com');
         Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com');
@@ -155,7 +154,7 @@ public with sharing class PersonControllerTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonController.searchPersons('gmail', 1);
+        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WHERE Name LIKE :searchTerm OR Phone__c LIKE :searchTerm OR Email__c LIKE :searchTerm WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset','%gmail%', 1);
 
         Test.stopTest();
 

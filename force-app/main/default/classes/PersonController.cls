@@ -1,41 +1,27 @@
 public with sharing class PersonController {
-    @AuraEnabled(cacheable = true)
-    public static List<Person__c> getPersons( Integer offset){
-        
-        return [
-            SELECT Name, Record_Type_Name__c, Phone__c, Email__c
-            FROM Person__c
-            WITH SECURITY_ENFORCED
-            ORDER BY Name
-            LIMIT 10
-            OFFSET :Integer.valueOf(offset)
-        ];
 
-    }
-
-    //TODO try to combine the queries for the persons into one and adding a where clause depending on the situation
     @AuraEnabled(cacheable = true)
     public static List<Person__c> searchPersons(String searchTerm, Integer offset){
-        //TODO use isBlank to avoid null pointer exception
-        //TODO sanitize the offset
-        searchTerm = searchTerm.trim();
+    
+        searchTerm = (String.isBlank(searchTerm)) ? '' : searchTerm.trim();
+        offset = (offset == null) ? 0 : Integer.valueOf(offset);
+
+        String query = '';
 
         if (searchTerm == '') {
-            return getPersons(offset);
+            query = 'SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset';
+        }else{
+
+            searchTerm = '%' + searchTerm + '%';
+
+
+            query = 'SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WHERE Name LIKE :searchTerm OR Phone__c LIKE :searchTerm OR Email__c LIKE :searchTerm WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset';
+
         }
 
-        searchTerm = '%' + searchTerm + '%';
+        
+        return PersonDataService.getData(query, searchTerm, offset);
 
-        //TODO move query to a dedicated class
-        return[
-            SELECT Name, Record_Type_Name__c, Phone__c, Email__c
-            FROM Person__c
-            WHERE Name LIKE :searchTerm OR Phone__c LIKE :searchTerm OR Email__c LIKE :searchTerm
-            WITH SECURITY_ENFORCED
-            ORDER BY Name
-            LIMIT 10
-            OFFSET :Integer.valueOf(offset)
-        ];
     }
 
 }

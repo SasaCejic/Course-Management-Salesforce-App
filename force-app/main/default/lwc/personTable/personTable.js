@@ -8,7 +8,6 @@ import searchPersons from '@salesforce/apex/PersonController.searchPersons';
 import LightningConfirm from 'lightning/confirm';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { refreshApex } from '@salesforce/apex';
 
 const actions = [
     { label: 'Edit', name: 'edit' },
@@ -76,14 +75,6 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         }
     }
     
-
-   
-
-    //TODO Make this work with wire and wire parameter
-    //TODO Q: What's the difference between Wire and Imperatively calling Apex?
-    //TODO add .catch and display errors when loading of people fails
-    //TODO Q: What are these three dots and what is their main purpose?
-    //TODO Q: What's the purpose of @track and when do we need it>
     loadMore(){
 
         this.isLoading = true;
@@ -172,7 +163,6 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         this.navigate('standard__recordPage', this.record.Id, 'c__Person', 'view');
     }
 
-    //TODO use Template Literals for string contact
     async handleConfirm(event,row) {
         const result = await LightningConfirm.open({
             message: `Are you sure you want to delete "${row.Name}" record?`,
@@ -248,7 +238,6 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         this.navigate('standard__recordPage', event.detail.recordId, 'c__Person', 'view');
     }
 
-    //TODO extract Navigation and Toast in dedicated methods
     showCreateErrorMessage(event) {
         this.toast('Error', 'Record cannot be created', 'error', 'dismissable');
     }

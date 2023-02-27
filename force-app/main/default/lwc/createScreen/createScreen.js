@@ -1,7 +1,6 @@
 import { LightningElement, track, wire } from 'lwc';
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import PERSON_OBJECT from '@salesforce/schema/Person__c';
-//TODO Use https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.data_considerations to retrieve record type infos
 export default class CreateScreen extends LightningElement {
 
     showRecordTypePanel = true;
