@@ -2,7 +2,7 @@
 public with sharing class PersonControllerTest {
     
    @isTest
-   static void getPersons_ShouldReturnAnEmptyList_IfThereAreNoRecords(){
+   static void getPersons_shouldReturnAnEmptyList_ifThereAreNoRecords(){
 
         Test.startTest();
 
@@ -15,7 +15,7 @@ public with sharing class PersonControllerTest {
    }
 
    @isTest
-   static void getPersons_ShouldReturnThePopulatedList_IfThereAreRecords(){
+   static void getPersons_shouldReturnThePopulatedList_ifThereAreRecords(){
 
         Person__c person1 = new Person__c(Name = 'FirstName1 LastName1', First_Name__c = 'FirstName1', Last_Name__c = 'LastName1', Email__c = 'cejicsasa17@gmail.com');
         Person__c person2 = new Person__c(Name = 'FirstName2 LastName2', First_Name__c = 'FirstName2', Last_Name__c = 'LastName2', Email__c = 'cejicsasa17@gmail.com');
@@ -39,24 +39,24 @@ public with sharing class PersonControllerTest {
         System.assertEquals(3, persons.size());
 
 
-        List<String> personNames  = new List<String>();
+        List<String> personIds  = new List<String>();
 
 
 
         for(Person__c p : persons){
-          personNames.add(p.Name);
+          personIds.add(p.Id);
         }
 
        //TODO Assert by ID
-        system.assert(personNames.contains(person1.Name));
-        system.assert(personNames.contains(person2.Name));
-        system.assert(personNames.contains(person3.Name));
+        system.assert(personIds.contains(person1.Id));
+        system.assert(personIds.contains(person2.Id));
+        system.assert(personIds.contains(person3.Id));
 
 
    }
 
    @isTest
-   static void getPersons_ShouldReturnTwoRecords_IfThereAreThreeRecords_AndOffsetNumberIsOne(){
+   static void getPersons_shouldReturnTwoRecords_ifThereAreThreeRecordsAndOffsetNumberIsOne(){
 
         Person__c person1 = new Person__c(Name = 'FirstName1 LastName1', First_Name__c = 'FirstName1', Last_Name__c = 'LastName1', Email__c = 'cejicsasa17@gmail.com');
         Person__c person2 = new Person__c(Name = 'FirstName2 LastName2', First_Name__c = 'FirstName2', Last_Name__c = 'LastName2', Email__c = 'cejicsasa17@gmail.com');
@@ -80,20 +80,20 @@ public with sharing class PersonControllerTest {
         System.assertEquals(2, persons.size());
 
 
-        List<String> personNames  = new List<String>();
+        List<String> personIds  = new List<String>();
 
         for(Person__c p : persons){
-          personNames.add(p.Name);
+          personIds.add(p.Id);
         }
         
-        system.assert(personNames.contains(person2.Name));
-        system.assert(personNames.contains(person3.Name));
+        system.assert(personIds.contains(person2.Id));
+        system.assert(personIds.contains(person3.Id));
 
 
    }
 
    @isTest
-   static void searchPersons_ShouldReturnAnEmptyLIst_IfNoRecordsAreInsertedAndSearchTermIsBlank(){
+   static void searchPersons_shouldReturnAnEmptyLIst_ifNoRecordsAreInsertedAndSearchTermIsBlank(){
 
         Test.startTest();
 
@@ -106,7 +106,7 @@ public with sharing class PersonControllerTest {
    }
 
    @isTest
-   static void searchPersons_ShouldReturnAllPersons_IfThreeRecordsAreInsertedAndSearchTermIsBlank(){
+   static void searchPersons_shouldReturnAllPersons_ifThreeRecordsAreInsertedAndSearchTermIsBlank(){
 
         Person__c person1 = new Person__c(Name = 'FirstName1 LastName1', First_Name__c = 'FirstName1', Last_Name__c = 'LastName1', Email__c = 'cejicsasa17@gmail.com');
         Person__c person2 = new Person__c(Name = 'FirstName2 LastName2', First_Name__c = 'FirstName2', Last_Name__c = 'LastName2', Email__c = 'cejicsasa17@gmail.com');
@@ -131,22 +131,22 @@ public with sharing class PersonControllerTest {
 
 
 
-        List<String> personNames  = new List<String>();
+        List<String> personIds  = new List<String>();
 
 
         for(Person__c p : persons){
-          personNames.add(p.Name);
+          personIds.add(p.Id);
         }
 
-        system.assert(personNames.contains(person1.Name));
-        system.assert(personNames.contains(person2.Name));
-        system.assert(personNames.contains(person3.Name));
+        system.assert(personIds.contains(person1.Id));
+        system.assert(personIds.contains(person2.Id));
+        system.assert(personIds.contains(person3.Id));
 
 
    }
 
    @isTest
-   static void searchPersons_ShouldReturnOneRecord_IfOneRecordNameMatchesSearchParameters(){
+   static void searchPersons_shouldReturnOneRecord_ifOneRecordNameMatchesSearchParameters(){
 
         Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com');
         Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com');
@@ -168,12 +168,12 @@ public with sharing class PersonControllerTest {
 
         System.assertEquals(1, persons.size());
 
-        System.assert(persons[0].Name == person1.Name);
+        System.assert(persons[0].Id == person1.Id);
 
    }
 
    @isTest
-   static void searchPersons_ShouldReturnOneRecord_IfOneRecordPhoneMatchesSearchParameters(){
+   static void searchPersons_shouldReturnOneRecord_ifOneRecordPhoneMatchesSearchParameters(){
         PersonTriggerHelper.called = true;
         Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com', Phone__c = '+381 635472');
         Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com', Phone__c = '+382 908837');
@@ -194,14 +194,13 @@ public with sharing class PersonControllerTest {
         Test.stopTest();
 
         System.assertEquals(1, persons.size());
-        System.assert(persons[0].Name == person2.Name);
 
-        System.assert(persons[0].Name == person2.Name);
+        System.assert(persons[0].Id == person2.Id);
 
    }
 
    @isTest
-   static void searchPersons_ShouldReturnOneRecord_IfOneRecordEmailMatchesSearchParameters(){
+   static void searchPersons_shouldReturnOneRecord_ifOneRecordEmailMatchesSearchParameters(){
 
         Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com');
         Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com');
@@ -223,14 +222,14 @@ public with sharing class PersonControllerTest {
 
         System.assertEquals(1, persons.size());
 
-        System.assert(persons[0].Name == person3.Name);
+        System.assert(persons[0].Id == person3.Id);
 
 
    }
 
 
    @isTest
-   static void searchPersons_ShouldReturnTwoRecords_IfThreeRecordEmailsMatchSearchParametersAndOffsetNumberIsOne(){
+   static void searchPersons_shouldReturnTwoRecords_ifThreeRecordEmailsMatchSearchParametersAndOffsetNumberIsOne(){
 
         Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com');
         Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com');
@@ -253,13 +252,13 @@ public with sharing class PersonControllerTest {
 
         System.assertEquals(2, persons.size());
 
-        List<String> personNames  = new List<String>();
+        List<String> personIds  = new List<String>();
 
         for(Person__c p : persons){
-          personNames.add(p.Name);
+          personIds.add(p.Id);
         }
-        system.assert(personNames.contains(createdPersons[1].Name));
-        system.assert(personNames.contains(createdPersons[2].Name));
+        system.assert(personIds.contains(createdPersons[1].Id));
+        system.assert(personIds.contains(createdPersons[2].Id));
 
 
    }
