@@ -72,13 +72,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         }else if(error){
             this.error = error;
 
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Error loading person records',
-                    message: this.error.body.message,
-                    variant: 'error'
-                })
-            );
+            this.toast('Error loading person records', this.error.body.message, 'error', 'dismissable');
         }
     }
     
@@ -175,14 +169,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     showRowDetails(row){
         this.record = row;
-        this[NavigationMixin.Navigate]({
-            type:'standard__recordPage',
-            attributes:{
-                recordId: this.record.Id,
-                objectApiName: 'c__Person',
-                actionName: 'view'
-            }
-        });
+        this.navigate('standard__recordPage', this.record.Id, 'c__Person', 'view');
     }
 
     //TODO use Template Literals for string contact
@@ -201,25 +188,14 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
     delete(event, row) {
         deleteRecord(row.Id)
             .then(() => {
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Success',
-                        message: `Record ${row.Id} deleted`,
-                        variant: 'success'
-                    })
-                );
+                
+                this.toast('Success', `Record ${row.Id} deleted`, 'success', 'dismissable');
                 
                 location.reload();
 
             })
             .catch(error => {
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Error deleting record',
-                        message: error.body.message,
-                        variant: 'error'
-                    })
-                );
+                this.toast('Error deleting record', error.body.message, 'error', 'dismissable');
             });
     }
 
@@ -234,14 +210,8 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
     }
 
     showEditErrorMessage(event) {
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: 'Error',
-                message: 'Record cannot be edited',
-                variant: 'error',
-                mode: 'dismissable'
-            })
-        );
+
+        this.toast('Error', 'Record cannot be edited', 'error', 'dismissable');
     }
 
     handleSendHandleSuccess(event){
@@ -251,22 +221,10 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     handleSuccess(event){
         this.hideModalBox();
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: 'Success',
-                message: `Record "${this.editRecordName}" was updated`,
-                variant: 'success',
-                mode: 'dismissable'
-            })
-        );
-        this[NavigationMixin.Navigate]({
-            type:'standard__recordPage',
-            attributes:{
-                recordId: this.editRecordId,
-                objectApiName: 'c__Person',
-                actionName: 'view'
-            }
-        });
+
+        this.toast('Success', `Record "${this.editRecordName}" has been updated`, 'success', 'dismissable');
+
+        this.navigate('standard__recordPage', this.editRecordId, 'c__Person', 'view');
        
     }
 
@@ -284,33 +242,35 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     handleSuccessCreate(event){
         this.handleCloseCreateScreen(event);
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: 'Success',
-                message: `Record "${event.detail.recordName}" has been created`,
-                variant: 'success',
-                mode: 'dismissable'
-            })
-        );
-        console.log('Event detail: ' + event.detail);
-        this[NavigationMixin.Navigate]({
-            type:'standard__recordPage',
-            attributes:{
-                recordId: event.detail.recordId,
-                objectApiName: 'c__Person',
-                actionName: 'view'
-            }
-        });
+        
+        this.toast('Success', `Record "${event.detail.recordName}" has been created`, 'success', 'dismissable');
+
+        this.navigate('standard__recordPage', event.detail.recordId, 'c__Person', 'view');
     }
 
     //TODO extract Navigation and Toast in dedicated methods
     showCreateErrorMessage(event) {
+        this.toast('Error', 'Record cannot be created', 'error', 'dismissable');
+    }
+
+    navigate(type, recordId, objectApiName, actionName){
+        this[NavigationMixin.Navigate]({
+            type: type,
+            attributes:{
+                recordId: recordId,
+                objectApiName: objectApiName,
+                actionName: actionName
+            }
+        });
+    }
+
+    toast(title, message, variant, mode){
         this.dispatchEvent(
             new ShowToastEvent({
-                title: 'Error',
-                message: 'Record cannot be created',
-                variant: 'error',
-                mode: 'dismissable'
+                title: title,
+                message: message,
+                variant: variant,
+                mode: mode
             })
         );
     }
