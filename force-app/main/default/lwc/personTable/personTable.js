@@ -58,8 +58,6 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         
         if(data){
 
-            console.log('Execute logic each time a new value is provisioned' + this.recordSize);
-
             if(data.length > 0){
                 if(this.recordSize > 0){
                     this.persons = [...this.persons, ...data];
@@ -76,7 +74,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
             this.dispatchEvent(
                 new ShowToastEvent({
-                    title: 'There are no records',
+                    title: 'Error loading person records',
                     message: this.error.body.message,
                     variant: 'error'
                 })
@@ -190,7 +188,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
     //TODO use Template Literals for string contact
     async handleConfirm(event,row) {
         const result = await LightningConfirm.open({
-            message: 'Are you sure you want to delete \"' + row.Name + '\" record?',
+            message: `Are you sure you want to delete "${row.Name}" record?`,
             theme: 'info',
             label: 'Confirm your action',
         });
@@ -206,7 +204,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
                 this.dispatchEvent(
                     new ShowToastEvent({
                         title: 'Success',
-                        message: 'Record ' + row.Id + ' deleted',
+                        message: `Record ${row.Id} deleted`,
                         variant: 'success'
                     })
                 );
@@ -256,7 +254,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         this.dispatchEvent(
             new ShowToastEvent({
                 title: 'Success',
-                message: 'Record ' + this.editRecordName + ' was updated',
+                message: `Record "${this.editRecordName}" was updated`,
                 variant: 'success',
                 mode: 'dismissable'
             })
@@ -289,7 +287,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
         this.dispatchEvent(
             new ShowToastEvent({
                 title: 'Success',
-                message: 'Record \'' + event.detail.recordName +'\' has been created',
+                message: `Record "${event.detail.recordName}" has been created`,
                 variant: 'success',
                 mode: 'dismissable'
             })

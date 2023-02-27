@@ -67,10 +67,10 @@ export default class CreateScreen extends LightningElement {
         this.createdRecordName = fields.First_Name__c + ' ' + fields.Last_Name__c;
 
         if(fields.Phone__c != null){
-            fields.Phone__c = '+381 ' + fields.Phone__c;
+            fields.Phone__c = `+381 ${fields.Phone__c}`;
         }
         if(fields.Work_Phone__c != null){
-            fields.Work_Phone__c = '+381 ' + fields.Work_Phone__c;
+            fields.Work_Phone__c = `+381 ${fields.Work_Phone__c}`;
         }
     
     this.template
