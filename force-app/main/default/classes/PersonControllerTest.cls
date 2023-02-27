@@ -93,32 +93,6 @@ public with sharing class PersonControllerTest {
    }
 
    @isTest
-   static void getStudentRecordTypeId_ShouldReturnStudentRecordTypeId(){
-
-        Test.startTest();
-
-        String studentRtId = PersonController.getStudentRecordTypeId();
-
-        Test.stopTest();
-
-        System.assertEquals([SELECT Id FROM RecordType WHERE Name = 'Student'].Id, studentRtId);
-
-   }
-
-   @isTest
-   static void getTutorRecordTypeId_ShouldReturnTutorRecordTypeId(){
-
-        Test.startTest();
-
-        String tutorRtId = PersonController.getTutorRecordTypeId();
-
-        Test.stopTest();
-
-        System.assertEquals([SELECT Id FROM RecordType WHERE Name = 'Tutor'].Id, tutorRtId);
-
-   }
-
-   @isTest
    static void searchPersons_ShouldReturnAnEmptyLIst_IfNoRecordsAreInsertedAndSearchTermIsBlank(){
 
         Test.startTest();

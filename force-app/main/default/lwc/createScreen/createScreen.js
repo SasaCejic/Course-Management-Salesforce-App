@@ -1,6 +1,6 @@
 import { LightningElement, track, wire } from 'lwc';
-import getStudentRecordTypeId from '@salesforce/apex/PersonController.getStudentRecordTypeId';
-import getTutorRecordTypeId from '@salesforce/apex/PersonController.getTutorRecordTypeId';
+import { getObjectInfo } from 'lightning/uiObjectInfoApi';
+import PERSON_OBJECT from '@salesforce/schema/Person__c';
 //TODO Use https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.data_considerations to retrieve record type infos
 export default class CreateScreen extends LightningElement {
 
@@ -8,15 +8,29 @@ export default class CreateScreen extends LightningElement {
 
     createdRecordName;
 
-    @wire(getStudentRecordTypeId)
-    getStudentRecordTypeId;
 
-    @wire(getTutorRecordTypeId)
-    getTutorRecordTypeId;
+    tutorRecordTypeId;
+    studentRecordTypeId;
 
     @track recordTypeValue = 'Tutor';
 
     selectedRecordTypeId;
+
+    @wire(getObjectInfo, { objectApiName: PERSON_OBJECT })
+    objectInfo;
+
+    setRecordTypeIds() {
+
+        const rtis = this.objectInfo.data.recordTypeInfos;
+
+        this.tutorRecordTypeId = Object.keys(rtis).find(rti => rtis[rti].name === 'Tutor');
+
+        this.studentRecordTypeId = Object.keys(rtis).find(rti => rtis[rti].name === 'Student');
+    }
+
+    connectedCallback(){
+        this.setRecordTypeIds();
+    }
 
 
     get recordTypeOptions() {
@@ -28,7 +42,7 @@ export default class CreateScreen extends LightningElement {
 
     changeRecordTypeValue(event){
         this.recordTypeValue = (this.recordTypeValue == 'Tutor') ? 'Student' : 'Tutor';
-        this.selectedRecordTypeId = (this.recordTypeValue == 'Tutor') ? this.getTutorRecordTypeId : this.getStudentRecordTypeId;
+        this.selectedRecordTypeId = (this.recordTypeValue == 'Tutor') ? this.tutorRecordTypeId : this.studentRecordTypeId;
     }
 
 
@@ -55,7 +69,7 @@ export default class CreateScreen extends LightningElement {
         this.showRecordTypePanel = false;
 
         if(typeof this.selectedRecordTypeId === 'undefined'){
-            this.selectedRecordTypeId = this.getTutorRecordTypeId;
+            this.selectedRecordTypeId = this.tutorRecordTypeId;
         }
     }
 

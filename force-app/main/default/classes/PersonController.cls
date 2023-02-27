@@ -13,16 +13,6 @@ public with sharing class PersonController {
 
     }
 
-    @AuraEnabled(cacheable = true)
-    public static String getStudentRecordTypeId(){
-        return Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Student').getRecordTypeId();
-    }
-
-    @AuraEnabled(cacheable = true)
-    public static String getTutorRecordTypeId(){
-        return Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Tutor').getRecordTypeId();
-    }
-
     //TODO try to combine the queries for the persons into one and adding a where clause depending on the situation
     @AuraEnabled(cacheable = true)
     public static List<Person__c> searchPersons(String searchTerm, Integer offset){
