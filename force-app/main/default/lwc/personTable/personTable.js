@@ -1,4 +1,4 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
 import {NavigationMixin} from 'lightning/navigation';
 import PERSON_NAME_FIELD from '@salesforce/schema/Person__c.Name';
 import PERSON_RECORD_TYPE_FIELD from '@salesforce/schema/Person__c.Record_Type_Name__c';
@@ -38,22 +38,54 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     @track error;
 
-    searchTerm = '';
-
     persons = [];
 
+    searchTerm = '';
+
+    recordSize = 0;
 
     defaultSortDirection = 'asc';
     sortDirection = 'asc';
     sortedBy;
 
-    recordSize = 0;
+    
     isLoading = true;
     infiniteLoading = true;
 
-    connectedCallback(){
-        this.loadMore();
+
+    @wire(searchPersons, {searchTerm: '$searchTerm',  offset: '$recordSize'})
+    wiredPerson({data, error}){
+        
+        if(data){
+
+            console.log('Execute logic each time a new value is provisioned' + this.recordSize);
+
+            if(data.length > 0){
+                if(this.recordSize > 0){
+                    this.persons = [...this.persons, ...data];
+                }else{
+                    this.persons = data;
+                }
+            }else{
+                this.infiniteLoading = false;
+                
+            }
+            this.isLoading = false;
+        }else if(error){
+            this.error = error;
+
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'There are no records',
+                    message: this.error.body.message,
+                    variant: 'error'
+                })
+            );
+        }
     }
+    
+
+   
 
     //TODO Make this work with wire and wire parameter
     //TODO Q: What's the difference between Wire and Imperatively calling Apex?
@@ -61,21 +93,10 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
     //TODO Q: What are these three dots and what is their main purpose?
     //TODO Q: What's the purpose of @track and when do we need it>
     loadMore(){
-        searchPersons({searchTerm: this.searchTerm,  offset: this.recordSize})
-        .then(result => {
-            if(result.length > 0){
-                if(this.recordSize > 0){
-                    this.persons = [...this.persons, ...result];
-                }else{
-                    this.persons = result;
-                }
-            }else{
-                this.infiniteLoading = false;
-            }
-            this.isLoading = false;
-        })
-        
-        this.recordSize = this.recordSize + 10;
+
+        this.isLoading = true;
+        this.recordSize += 10;
+       
     }
 
     resetData(){
@@ -92,9 +113,11 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 		const searchTerm = event.target.value;
 		
 		this.delayTimeout = setTimeout(() => {
-			this.searchTerm = searchTerm;
+
             this.resetData();
-            this.loadMore();
+
+			this.searchTerm = searchTerm;
+            
 		}, 300);
 	}
 	get hasResults() {
