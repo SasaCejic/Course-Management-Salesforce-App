@@ -1,20 +1,7 @@
 <template>
-<!--    TODO Use Card cmp-->
-    <div class="slds-page-header slds-page-header_record-home">
-        <div class="slds-page-header__row">
-            <div class="slds-page-header__col-title">
-                <div class="slds-media">
-                    <div class="slds-media__figure">
-                        <lightning-icon icon-name="standard:people" size="medium" alternative-text="Person"></lightning-icon>
-                    </div>
-                    <div class="slds-media__body" style="line-height: 13px;">
-                        <span>Person</span>
-                        <span class="slds-page-header__title slds-truncate" title={name}>{name}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <lightning-card variant="Narrow" title = {name} icon-name="standard:people"></lightning-card>
+    
     <lightning-card>
         <lightning-record-form
             record-id={recordId}

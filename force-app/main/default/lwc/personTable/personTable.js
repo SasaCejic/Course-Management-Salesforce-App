@@ -1,4 +1,4 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
 import {NavigationMixin} from 'lightning/navigation';
 import PERSON_NAME_FIELD from '@salesforce/schema/Person__c.Name';
 import PERSON_RECORD_TYPE_FIELD from '@salesforce/schema/Person__c.Record_Type_Name__c';
@@ -8,7 +8,6 @@ import searchPersons from '@salesforce/apex/PersonController.searchPersons';
 import LightningConfirm from 'lightning/confirm';
 import { deleteRecord } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { refreshApex } from '@salesforce/apex';
 
 const actions = [
     { label: 'Edit', name: 'edit' },
@@ -38,44 +37,49 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     @track error;
 
-    searchTerm = '';
-
     persons = [];
 
+    searchTerm = '';
+
+    recordSize = 0;
 
     defaultSortDirection = 'asc';
     sortDirection = 'asc';
     sortedBy;
 
-    recordSize = 0;
+    
     isLoading = true;
     infiniteLoading = true;
 
-    connectedCallback(){
-        this.loadMore();
-    }
 
-    //TODO Make this work with wire and wire parameter
-    //TODO Q: What's the difference between Wire and Imperatively calling Apex?
-    //TODO add .catch and display errors when loading of people fails
-    //TODO Q: What are these three dots and what is their main purpose?
-    //TODO Q: What's the purpose of @track and when do we need it>
-    loadMore(){
-        searchPersons({searchTerm: this.searchTerm,  offset: this.recordSize})
-        .then(result => {
-            if(result.length > 0){
+    @wire(searchPersons, {searchTerm: '$searchTerm',  offset: '$recordSize'})
+    wiredPerson({data, error}){
+        
+        if(data){
+
+            if(data.length > 0){
                 if(this.recordSize > 0){
-                    this.persons = [...this.persons, ...result];
+                    this.persons = [...this.persons, ...data];
                 }else{
-                    this.persons = result;
+                    this.persons = data;
                 }
             }else{
                 this.infiniteLoading = false;
+                
             }
             this.isLoading = false;
-        })
-        
-        this.recordSize = this.recordSize + 10;
+        }else if(error){
+            this.error = error;
+
+            this.toast('Error loading person records', this.error.body.message, 'error', 'dismissable');
+        }
+    }
+    
+    loadMore(){
+
+        this.isLoading = true;
+        this.recordSize += 10;
+       
     }
 
     resetData(){
@@ -92,9 +96,11 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 		const searchTerm = event.target.value;
 		
 		this.delayTimeout = setTimeout(() => {
-			this.searchTerm = searchTerm;
+
             this.resetData();
-            this.loadMore();
+
+			this.searchTerm = searchTerm;
+            
 		}, 300);
 	}
 	get hasResults() {
@@ -154,20 +160,12 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     showRowDetails(row){
         this.record = row;
-        this[NavigationMixin.Navigate]({
-            type:'standard__recordPage',
-            attributes:{
-                recordId: this.record.Id,
-                objectApiName: 'c__Person',
-                actionName: 'view'
-            }
-        });
+        this.navigate('standard__recordPage', this.record.Id, 'c__Person', 'view');
     }
 
-    //TODO use Template Literals for string contact
     async handleConfirm(event,row) {
         const result = await LightningConfirm.open({
-            message: 'Are you sure you want to delete \"' + row.Name + '\" record?',
+            message: `Are you sure you want to delete "${row.Name}" record?`,
             theme: 'info',
             label: 'Confirm your action',
         });
@@ -180,25 +178,14 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
     delete(event, row) {
         deleteRecord(row.Id)
             .then(() => {
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Success',
-                        message: 'Record ' + row.Id + ' deleted',
-                        variant: 'success'
-                    })
-                );
+                
+                this.toast('Success', `Record ${row.Id} deleted`, 'success', 'dismissable');
                 
                 location.reload();
 
             })
             .catch(error => {
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Error deleting record',
-                        message: error.body.message,
-                        variant: 'error'
-                    })
-                );
+                this.toast('Error deleting record', error.body.message, 'error', 'dismissable');
             });
     }
 
@@ -213,14 +200,8 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
     }
 
     showEditErrorMessage(event) {
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: 'Error',
-                message: 'Record cannot be edited',
-                variant: 'error',
-                mode: 'dismissable'
-            })
-        );
+
+        this.toast('Error', 'Record cannot be edited', 'error', 'dismissable');
     }
 
     handleSendHandleSuccess(event){
@@ -230,22 +211,10 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     handleSuccess(event){
         this.hideModalBox();
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: 'Success',
-                message: 'Record ' + this.editRecordName + ' was updated',
-                variant: 'success',
-                mode: 'dismissable'
-            })
-        );
-        this[NavigationMixin.Navigate]({
-            type:'standard__recordPage',
-            attributes:{
-                recordId: this.editRecordId,
-                objectApiName: 'c__Person',
-                actionName: 'view'
-            }
-        });
+
+        this.toast('Success', `Record "${this.editRecordName}" has been updated`, 'success', 'dismissable');
+
+        this.navigate('standard__recordPage', this.editRecordId, 'c__Person', 'view');
        
     }
 
@@ -263,33 +232,34 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     handleSuccessCreate(event){
         this.handleCloseCreateScreen(event);
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: 'Success',
-                message: 'Record \'' + event.detail.recordName +'\' has been created',
-                variant: 'success',
-                mode: 'dismissable'
-            })
-        );
-        console.log('Event detail: ' + event.detail);
+        
+        this.toast('Success', `Record "${event.detail.recordName}" has been created`, 'success', 'dismissable');
+
+        this.navigate('standard__recordPage', event.detail.recordId, 'c__Person', 'view');
+    }
+
+    showCreateErrorMessage(event) {
+        this.toast('Error', 'Record cannot be created', 'error', 'dismissable');
+    }
+
+    navigate(type, recordId, objectApiName, actionName){
         this[NavigationMixin.Navigate]({
-            type:'standard__recordPage',
+            type: type,
             attributes:{
-                recordId: event.detail.recordId,
-                objectApiName: 'c__Person',
-                actionName: 'view'
+                recordId: recordId,
+                objectApiName: objectApiName,
+                actionName: actionName
             }
         });
     }
 
-    //TODO extract Navigation and Toast in dedicated methods
-    showCreateErrorMessage(event) {
+    toast(title, message, variant, mode){
         this.dispatchEvent(
             new ShowToastEvent({
-                title: 'Error',
-                message: 'Record cannot be created',
-                variant: 'error',
-                mode: 'dismissable'
+                title: title,
+                message: message,
+                variant: variant,
+                mode: mode
             })
         );
     }
