@@ -6,7 +6,7 @@ public with sharing class PersonDataServiceTest {
 
         Test.startTest();
 
-        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset', '', 0);
+        List<Person__c> persons = PersonDataService.getData('', 0);
 
         Test.stopTest();
 
@@ -31,7 +31,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset','', 0);
+        List<Person__c> persons = PersonDataService.getData('', 0);
 
         Test.stopTest();
 
@@ -71,7 +71,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WHERE Name LIKE :searchTerm OR Phone__c LIKE :searchTerm OR Email__c LIKE :searchTerm WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset','Smith Manison', 0);
+        List<Person__c> persons = PersonDataService.getData('Smith Manison', 0);
 
         Test.stopTest();
 
@@ -98,7 +98,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WHERE Name LIKE :searchTerm OR Phone__c LIKE :searchTerm OR Email__c LIKE :searchTerm WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset','+382 908837', 0);
+        List<Person__c> persons = PersonDataService.getData('+382 908837', 0);
 
         Test.stopTest();
 
@@ -126,7 +126,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WHERE Name LIKE :searchTerm OR Phone__c LIKE :searchTerm OR Email__c LIKE :searchTerm WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset','stow@gmail.com', 0);
+        List<Person__c> persons = PersonDataService.getData('stow@gmail.com', 0);
 
         Test.stopTest();
 
@@ -154,7 +154,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('SELECT Name, Record_Type_Name__c, Phone__c, Email__c FROM Person__c WHERE Name LIKE :searchTerm OR Phone__c LIKE :searchTerm OR Email__c LIKE :searchTerm WITH SECURITY_ENFORCED ORDER BY Name LIMIT 10 OFFSET :offset','%gmail%', 1);
+        List<Person__c> persons = PersonDataService.getData('gmail', 1);
 
         Test.stopTest();
 
