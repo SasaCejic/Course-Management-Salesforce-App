@@ -4,7 +4,7 @@
 
         component.set('v.columns', fields);
 
-
+|
         var action = component.get("c.searchPersons");
         action.setParams({"searchTerm" : '', "offset" : 0, "limitValue": null});
         action.setCallback(this, function(response){

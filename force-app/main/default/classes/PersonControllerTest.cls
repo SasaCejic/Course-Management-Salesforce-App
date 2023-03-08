@@ -171,5 +171,40 @@ public with sharing class PersonControllerTest {
 
 
    }
-   
+
+   @isTest
+   static void searchPersons_shouldReturnTwoRecords_ifThreeRecordEmailsMatchSearchParametersAndLimitValueIsTwo(){
+
+        Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com');
+        Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com');
+        Person__c person3 = new Person__c(Name = 'Steve Owen', First_Name__c = 'Steve', Last_Name__c = 'Owen', Email__c = 'stow@gmail.com');
+
+        List<Person__c> createdPersons = new List<Person__c>();
+
+        createdPersons.add(person1);
+        createdPersons.add(person2);
+        createdPersons.add(person3);
+        createdPersons.sort();
+
+        Test.startTest();
+
+        insert createdPersons;
+
+        List<Person__c> persons = PersonController.searchPersons('gmail', null, 2);
+
+        Test.stopTest();
+
+        System.assertEquals(2, persons.size());
+
+        List<String> personIds  = new List<String>();
+
+        for(Person__c p : persons){
+          personIds.add(p.Id);
+        }
+        system.assert(personIds.contains(createdPersons[0].Id));
+        system.assert(personIds.contains(createdPersons[1].Id));
+
+
+   }
+
 }
