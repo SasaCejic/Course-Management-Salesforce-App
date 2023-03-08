@@ -43,6 +43,8 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
 
     recordSize = 0;
 
+    limitValue = 10;
+
     defaultSortDirection = 'asc';
     sortDirection = 'asc';
     sortedBy;
@@ -52,7 +54,7 @@ export default class PersonTable extends NavigationMixin (LightningElement) {
     infiniteLoading = true;
 
 
-    @wire(searchPersons, {searchTerm: '$searchTerm',  offset: '$recordSize'})
+    @wire(searchPersons, {searchTerm: '$searchTerm',  offset: '$recordSize', limitValue: '$limitValue'})
     wiredPerson({data, error}){
         
         if(data){

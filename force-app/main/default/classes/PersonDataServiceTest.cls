@@ -6,7 +6,7 @@ public with sharing class PersonDataServiceTest {
 
         Test.startTest();
 
-        List<Person__c> persons = PersonDataService.getData('', 0);
+        List<Person__c> persons = PersonDataService.getData('', 0, null);
 
         Test.stopTest();
 
@@ -31,7 +31,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('', 0);
+        List<Person__c> persons = PersonDataService.getData('', 0, null);
 
         Test.stopTest();
 
@@ -71,7 +71,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('Smith Manison', 0);
+        List<Person__c> persons = PersonDataService.getData('Smith Manison', 0, null);
 
         Test.stopTest();
 
@@ -98,7 +98,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('+382 908837', 0);
+        List<Person__c> persons = PersonDataService.getData('+382 908837', 0, null);
 
         Test.stopTest();
 
@@ -126,7 +126,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('stow@gmail.com', 0);
+        List<Person__c> persons = PersonDataService.getData('stow@gmail.com', 0, null);
 
         Test.stopTest();
 
@@ -154,7 +154,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('gmail', 1);
+        List<Person__c> persons = PersonDataService.getData('gmail', 1, 10);
 
         Test.stopTest();
 
@@ -170,7 +170,5 @@ public with sharing class PersonDataServiceTest {
 
 
    }
-
-
 
 }

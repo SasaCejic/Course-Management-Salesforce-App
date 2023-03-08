@@ -1,0 +1,26 @@
+<aura:component controller = "PersonController" implements = "force:appHostable,flexipage:availableForAllPageTypes" access = "global">
+
+<!-- handlers-->
+<aura:handler event = "c:closeEditModal" action = "{!c.closeEdit}"/>
+<aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+<!-- attributes -->
+<aura:attribute name="data" type="List"/>
+<aura:attribute name="columns" type="List"/>
+<aura:attribute name="showEdit" type="Boolean" default="false"/>
+
+<aura:registerEvent name = "EditEvent" type = "c:editEvent"/>
+
+<div style="height: 300px">
+    <lightning:datatable
+            keyField="id"
+            data="{! v.data }"
+            columns="{! v.columns }"
+            hideCheckboxColumn="true"
+            onrowaction = "{!c.handleRowAction}"/>
+</div>
+
+<aura:if isTrue = "{!v.showEdit}">
+    <c:auraEditPerson/>
+</aura:if>
+</aura:component>	

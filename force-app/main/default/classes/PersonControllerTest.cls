@@ -6,7 +6,7 @@ public with sharing class PersonControllerTest {
 
         Test.startTest();
 
-        List<Person__c> persons = PersonController.searchPersons('', 0);
+        List<Person__c> persons = PersonController.searchPersons('', 0, null);
 
         Test.stopTest();
 
@@ -31,7 +31,7 @@ public with sharing class PersonControllerTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonController.searchPersons('', 0);
+        List<Person__c> persons = PersonController.searchPersons('', 0, null);
 
         Test.stopTest();
 
@@ -71,7 +71,7 @@ public with sharing class PersonControllerTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonController.searchPersons('Smith Manison', 0);
+        List<Person__c> persons = PersonController.searchPersons('Smith Manison', 0, null);
 
         Test.stopTest();
 
@@ -98,7 +98,7 @@ public with sharing class PersonControllerTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonController.searchPersons('+382 908837', 0);
+        List<Person__c> persons = PersonController.searchPersons('+382 908837', 0, null);
 
         Test.stopTest();
 
@@ -125,7 +125,7 @@ public with sharing class PersonControllerTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonController.searchPersons('stow@gmail.com', 0);
+        List<Person__c> persons = PersonController.searchPersons('stow@gmail.com', 0, null);
 
         Test.stopTest();
 
@@ -155,7 +155,7 @@ public with sharing class PersonControllerTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonController.searchPersons('gmail', 1);
+        List<Person__c> persons = PersonController.searchPersons('gmail', 1, 10);
 
         Test.stopTest();
 
@@ -171,7 +171,5 @@ public with sharing class PersonControllerTest {
 
 
    }
-
-
-
+   
 }
