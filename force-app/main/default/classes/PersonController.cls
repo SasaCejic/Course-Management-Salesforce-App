@@ -7,4 +7,9 @@ public with sharing class PersonController {
 
     }
 
+    @AuraEnabled(cacheable = true)
+    public static Id getRecordTypeIdByName(String name){
+        return PersonDataService.getRecordTypeId(name);
+    }
+
 }

@@ -19,4 +19,10 @@ public with sharing class PersonDataService {
         return Database.query(query);
     }
 
+    public static Id getRecordTypeId(String name){
+        name = (String.isBlank(name) || (!name.equals('Tutor') && !name.equals('Student'))) ? 'Tutor' : name;
+
+        return Schema.SObjectType.Person__c.getRecordTypeInfosByName().get(name).getRecordTypeId();
+    }
+
 }

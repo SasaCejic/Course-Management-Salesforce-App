@@ -207,4 +207,65 @@ public with sharing class PersonControllerTest {
 
    }
 
+   @isTest
+   static void getRecordTypeIdByName_shouldReturnTutorRecordTypeId_IfNameParameterIsNull(){
+
+          String expected = Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Tutor').getRecordTypeId();
+
+          Test.startTest();
+
+          String actual = PersonController.getRecordTypeIdByName(null);
+
+          Test.stopTest();
+
+          System.assertEquals(expected, actual);
+
+   }
+
+   @isTest
+   static void getRecordTypeIdByName_shouldReturnTutorRecordTypeId_IfNameParameterIsNeitherTutorOrStudent(){
+
+          String expected = Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Tutor').getRecordTypeId();
+
+          Test.startTest();
+
+          String actual = PersonController.getRecordTypeIdByName('RecordType');
+
+          Test.stopTest();
+
+          System.assertEquals(expected, actual);
+
+   }
+
+
+   @isTest
+   static void getRecordTypeIdByName_shouldReturnTutorRecordTypeId_IfNameParameterIsTutor(){
+
+          String expected = Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Tutor').getRecordTypeId();
+
+          Test.startTest();
+
+          String actual = PersonController.getRecordTypeIdByName('Tutor');
+
+          Test.stopTest();
+
+          System.assertEquals(expected, actual);
+
+   }
+
+   @isTest
+   static void getRecordTypeIdByName_shouldReturnStudentRecordTypeId_IfNameParameterIsStudent(){
+
+          String expected = Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Student').getRecordTypeId();
+
+          Test.startTest();
+
+          String actual = PersonController.getRecordTypeIdByName('Student');
+
+          Test.stopTest();
+
+          System.assertEquals(expected, actual);
+
+   }
+
 }

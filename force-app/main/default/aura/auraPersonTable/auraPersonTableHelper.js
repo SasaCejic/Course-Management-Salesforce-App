@@ -29,6 +29,10 @@
         component.set('v.showEdit', value);
     },
 
+    changeShowCreateValue : function(component, value){
+        component.set("v.showCreate", value);
+    },
+
     viewRecordDetailPage : function(component, event, recordId){
 
         var navService = component.find("navService");

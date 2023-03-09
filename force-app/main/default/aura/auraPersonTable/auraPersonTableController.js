@@ -40,5 +40,13 @@
     closeEdit : function(component, event, helper){
         var showEditValue = event.getParam("showEdit");
         helper.changeShowEditValue(component, showEditValue);
+    },
+
+    createNewPerson : function(component, event, helper){
+        helper.changeShowCreateValue(component, true);
+    },
+
+    closeCreate : function(component, event, helper){
+        helper.changeShowCreateValue(component, false);
     }
 })

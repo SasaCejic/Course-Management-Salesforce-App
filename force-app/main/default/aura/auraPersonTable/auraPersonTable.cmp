@@ -1,13 +1,15 @@
 <aura:component controller = "PersonController" implements = "force:appHostable,flexipage:availableForAllPageTypes" access = "global">
 
 <!-- handlers-->
-<aura:handler event = "c:closeEditModal" action = "{!c.closeEdit}"/>
 <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+<aura:handler event = "c:closeEditModal" action = "{!c.closeEdit}"/>
+<aura:handler event = "c:closeCreateModal" action = "{!c.closeCreate}"/>
 
 <!-- attributes -->
 <aura:attribute name="data" type="List"/>
 <aura:attribute name="columns" type="List"/>
 <aura:attribute name="showEdit" type="Boolean" default="false"/>
+<aura:attribute name = "showCreate" type = "Boolean" default = "false"/>
 
 <lightning:navigation aura:id="navService"/>
 
@@ -25,4 +27,13 @@
 <aura:if isTrue = "{!v.showEdit}">
     <c:auraEditPerson/>
 </aura:if>
+<aura:if isTrue = "{!v.showCreate}">
+    <c:auraCreatePerson/>
+</aura:if>
+
+<div class="slds-m-around_medium">
+    <lightning:button  variant = "Neutral" label="New Person" title="Create new Person record" class="slds-float_right" 
+        onclick = "{!c.createNewPerson}"/>
+</div>
+
 </aura:component>	
