@@ -23,5 +23,23 @@
         showModalValue.setParams({"showEdit": value});
 
         showModalValue.fire();
+    },
+
+    viewRecordDetailPage : function(component, event, recordId){
+
+        var navService = component.find("navService");
+
+        var pageReference = {
+            type: 'standard__recordPage',
+            attributes: {
+                recordId: recordId,
+                objectApiName: 'Person__c',
+                actionName: 'view'
+            }
+        };
+
+        event.preventDefault();
+        navService.navigate(pageReference);
+
     }
 })

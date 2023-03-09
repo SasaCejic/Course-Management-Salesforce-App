@@ -9,6 +9,9 @@
 
     handleSuccess : function(component, event, helper){
         helper.showToast("Success!", "The record has been updated successfully.", "success", "dismissable");
+        var recordId = component.get("v.recordId");
+
+        helper.viewRecordDetailPage(component, event, recordId);
     },
 
     handleError : function(component, event, helper){

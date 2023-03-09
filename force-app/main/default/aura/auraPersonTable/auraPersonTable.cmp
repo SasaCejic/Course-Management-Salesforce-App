@@ -9,6 +9,8 @@
 <aura:attribute name="columns" type="List"/>
 <aura:attribute name="showEdit" type="Boolean" default="false"/>
 
+<lightning:navigation aura:id="navService"/>
+
 <aura:registerEvent name = "EditEvent" type = "c:editEvent"/>
 
 <div style="height: 300px">

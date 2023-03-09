@@ -30,7 +30,8 @@
                 helper.editPerson(cmp, row);
                 break;
             case 'urlredirect':
-                alert('urlredirect')
+                var recordId = row.Id;
+                helper.viewRecordDetailPage(cmp, event, recordId);
                 break;
             default:
         }
