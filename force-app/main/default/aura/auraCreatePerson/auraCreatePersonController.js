@@ -9,7 +9,7 @@
     },
 
     closeModal : function(component, event, helper){
-        helper.changeShowCreateModalValue(false);
+        helper.changeShowCreateModalValue(component, false);
     },
 
     handleError : function(component, event, helper){

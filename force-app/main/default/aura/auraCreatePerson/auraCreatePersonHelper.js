@@ -5,8 +5,8 @@
 
     },
 
-    changeShowCreateModalValue : function(value){
-        var closeCreateModal = $A.get("e.c:closeCreateModal");
+    changeShowCreateModalValue : function(component, value){
+        var closeCreateModal = component.getEvent("closeCreateModal");
         closeCreateModal.setParams({"showCreate": value});
 
         closeCreateModal.fire();

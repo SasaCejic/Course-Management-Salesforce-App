@@ -10,6 +10,8 @@
 
 <lightning:navigation aura:id="navService"/>
 
+<aura:registerEvent name="closeCreateModal" type="c:closeCreateModal"/>
+
   
 <aura:if isTrue = "{!v.showRecordTypePanel}">
 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">

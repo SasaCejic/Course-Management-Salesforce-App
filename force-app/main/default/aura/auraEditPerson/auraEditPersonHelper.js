@@ -18,8 +18,8 @@
         toastEvent.fire();
     },
 
-    changeShowModalValue : function(value){
-        var showModalValue = $A.get("e.c:closeEditModal");
+    changeShowModalValue : function(component, value){
+        var showModalValue = component.getEvent("closeEditModal")
         showModalValue.setParams({"showEdit": value});
 
         showModalValue.fire();

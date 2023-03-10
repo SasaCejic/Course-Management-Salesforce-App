@@ -19,6 +19,6 @@
     },
 
     closeModal : function(component,event, helper){
-        helper.changeShowModalValue(false);
+        helper.changeShowModalValue(component, false);
     }
 })

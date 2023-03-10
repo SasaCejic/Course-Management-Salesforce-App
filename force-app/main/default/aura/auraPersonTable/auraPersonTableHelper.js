@@ -15,8 +15,8 @@
     },
 
     editPerson : function(cmp, row) {
+
         cmp.set('v.showEdit', true);
-        
 
         var editEvent = $A.get("e.c:editEvent");
         editEvent.setParams({"selectedRecord": row});

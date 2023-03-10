@@ -2,8 +2,9 @@
 
 <!-- handlers-->
 <aura:handler name="init" value="{! this }" action="{! c.init }"/>
-<aura:handler event = "c:closeEditModal" action = "{!c.closeEdit}"/>
-<aura:handler event = "c:closeCreateModal" action = "{!c.closeCreate}"/>
+<aura:handler name = "closeEditModal" event = "c:closeEditModal" action = "{!c.closeEdit}"/>
+<aura:handler name = "closeCreateModal" event = "c:closeCreateModal" action = "{!c.closeCreate}"/>
+
 
 <!-- attributes -->
 <aura:attribute name="data" type="List"/>
@@ -13,7 +14,7 @@
 
 <lightning:navigation aura:id="navService"/>
 
-<aura:registerEvent name = "EditEvent" type = "c:editEvent"/>
+<aura:registerEvent name = "editEvent" type = "c:editEvent"/>
 
 <div style="height: 300px">
     <lightning:datatable
