@@ -20,6 +20,10 @@
         helper.showToast("Success!", "The record has been created successfully.", "success", "dismissable");
 
         helper.viewRecordDetailPage(component, event);
+    },
+
+    onSubmitHandler : function(component, event, helper){
+        helper.addPhoneNumberPrefix(component, event, "+381");
     }
 
 })

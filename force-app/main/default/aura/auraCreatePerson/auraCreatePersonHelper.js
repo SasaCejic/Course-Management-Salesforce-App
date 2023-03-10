@@ -54,6 +54,25 @@
         event.preventDefault();
         navService.navigate(pageReference);
 
+    },
+
+    addPhoneNumberPrefix : function(component, event, prefix){
+
+        event.preventDefault();
+
+        var fields = event.getParam("fields");
+
+        if(fields["Phone__c"] != null){
+            fields["Phone__c"] = prefix + " " + fields["Phone__c"];
+        }
+
+        if(fields["Work_Phone__c"] != null){
+            fields["Work_Phone__c"] = prefix + " " + fields["Work_Phone__c"];
+        }
+
+        component.find("myRecordCreateForm").submit(fields);
+
+        
     }
 
 })

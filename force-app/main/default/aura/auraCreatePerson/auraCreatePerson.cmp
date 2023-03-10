@@ -9,6 +9,7 @@
 <aura:attribute name="selectedRecordTypeId" type="String"/>
 
 <lightning:navigation aura:id="navService"/>
+
   
 <aura:if isTrue = "{!v.showRecordTypePanel}">
 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
@@ -72,6 +73,7 @@
                 oncancel = "{!c.closeModal}"
                 onerror = "{!c.handleError}"
                 onsuccess="{!c.handleSuccess}"
+                onsubmit="{!c.onSubmitHandler}"
             >
             </lightning:recordForm>
         
