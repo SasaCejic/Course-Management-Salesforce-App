@@ -12,4 +12,9 @@ public with sharing class PersonController {
         return PersonDataService.getRecordTypeId(name);
     }
 
+    @AuraEnabled(cacheable = true)
+    public static List<String> getRecordTypeNames(){
+        return PersonDataService.getRecordTypeNames();
+    }
+
 }

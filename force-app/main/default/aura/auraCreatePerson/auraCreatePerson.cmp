@@ -4,7 +4,7 @@
 
 <aura:attribute name = "showRecordTypePanel" type = "Boolean" default = "true"/>
 
-<aura:attribute name="options" type="List" default = "[{'label' : 'Tutor', 'value' : 'Tutor'},{'label' : 'Student', 'value' : 'Student'}]"/>
+<aura:attribute name="options" type="List"/>
 <aura:attribute name = "selectedRecordTypeName" type = "String" default = "Tutor"/>
 <aura:attribute name="selectedRecordTypeId" type="String"/>
 

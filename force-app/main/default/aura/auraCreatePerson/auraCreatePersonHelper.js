@@ -1,4 +1,29 @@
 ({
+
+    initializeDefaultOptions : function(component, event){
+
+        var action = component.get("c.getRecordTypeNames");
+        
+        action.setCallback(this, function(response){
+
+            var recordTypes = response.getReturnValue();
+            
+            var options = [];
+
+            for(var rt in recordTypes){
+
+                options.push({"label" : recordTypes[rt], "value" : recordTypes[rt]});
+
+            }
+
+            component.set("v.options", options);
+            
+        });
+
+        $A.enqueueAction(action);
+
+    },
+
     changeShowRecordTypePanelValue : function(component, value) {
 
         component.set("v.showRecordTypePanel", value);

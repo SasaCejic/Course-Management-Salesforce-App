@@ -1,6 +1,6 @@
 ({
     init : function(component, event, helper) {
-        
+        helper.initializeDefaultOptions(component, event);
     },
 
     hideRecordTypePanel : function(component, event, helper){

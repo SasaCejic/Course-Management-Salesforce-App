@@ -25,4 +25,20 @@ public with sharing class PersonDataService {
         return Schema.SObjectType.Person__c.getRecordTypeInfosByName().get(name).getRecordTypeId();
     }
 
+    public static List<String> getRecordTypeNames(){
+
+        List<RecordType> recordTypes = [SELECT Name FROM RecordType WHERE SObjectType = 'Person__c'];
+
+        List<String> names = new List<String>();
+
+        for(RecordType rt : recordTypes){
+            names.add(rt.Name);
+        }
+
+        names.sort();
+
+        return names;
+
+    }
+
 }

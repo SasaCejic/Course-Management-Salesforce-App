@@ -268,6 +268,20 @@ public with sharing class PersonDataServiceTest {
 
    }
 
+   @isTest
+   static void getRecordTypeNames_shouldReturnTutorAndStudent(){
+     List<String> expected = new List<String>{'Tutor', 'Student'};
+     expected.sort();
+
+     Test.startTest();
+
+     List<String> actual = PersonDataService.getRecordTypeNames();
+
+     Test.stopTest();
+
+     System.assertEquals(expected, actual);
+   }
+
 
 
 }
