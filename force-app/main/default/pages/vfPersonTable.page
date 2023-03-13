@@ -1,0 +1,27 @@
+<apex:page controller = "PersonTableController">
+
+<apex:pageBlock title="Person Records">
+
+   <apex:pageBlockTable value="{!persons}" var="p">
+
+   <apex:column>
+        <apex:outputLink
+            value="{! URLFOR($Action.Person__c.Edit, p.Id) }">
+            Edit
+        </apex:outputLink>
+        &nbsp;
+        <apex:outputLink
+            value="{! URLFOR($Action.Person__c.Delete, p.Id) }">
+            Del
+        </apex:outputLink>
+    </apex:column>
+
+      <apex:column headerValue="Name"><apex:outputLink value = "/{!p.Id}">{!p.Name}</apex:outputLink></apex:column>
+      <apex:column value="{!p.Record_Type_Name__c}"/>
+      <apex:column value="{!p.Phone__c}"/>
+      <apex:column value="{!p.Email__c}"/>
+   </apex:pageBlockTable>
+
+</apex:pageBlock>
+
+</apex:page>
