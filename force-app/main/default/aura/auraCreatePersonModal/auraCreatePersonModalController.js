@@ -1,15 +1,6 @@
 ({
-    init : function(component, event, helper) {
-        helper.initializeDefaultOptions(component, event);
-    },
-
-    hideRecordTypePanel : function(component, event, helper){
-        helper.setSelectedRecordTypeId(component);
-        helper.changeShowRecordTypePanelValue(component, false);
-    },
-
     closeModal : function(component, event, helper){
-        helper.changeShowCreateModalValue(component, false);
+        component.find('overlayLib').notifyClose();
     },
 
     handleError : function(component, event, helper){
@@ -25,5 +16,4 @@
     onSubmitHandler : function(component, event, helper){
         helper.addPhoneNumberPrefix(component, event, "+381");
     }
-
 })

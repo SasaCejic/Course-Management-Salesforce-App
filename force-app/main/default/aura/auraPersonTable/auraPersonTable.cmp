@@ -2,19 +2,16 @@
 
 <!-- handlers-->
 <aura:handler name="init" value="{! this }" action="{! c.init }"/>
-<aura:handler name = "closeEditModal" event = "c:closeEditModal" action = "{!c.closeEdit}"/>
-<aura:handler name = "closeCreateModal" event = "c:closeCreateModal" action = "{!c.closeCreate}"/>
 
 
 <!-- attributes -->
 <aura:attribute name="data" type="List"/>
 <aura:attribute name="columns" type="List"/>
-<aura:attribute name="showEdit" type="Boolean" default="false"/>
-<aura:attribute name = "showCreate" type = "Boolean" default = "false"/>
+
 
 <lightning:navigation aura:id="navService"/>
 
-<aura:registerEvent name = "editEvent" type = "c:editEvent"/>
+<lightning:overlayLibrary aura:id="overlayLib"/>
 
 <div style="height: 300px">
     <lightning:datatable
@@ -24,13 +21,6 @@
             hideCheckboxColumn="true"
             onrowaction = "{!c.handleRowAction}"/>
 </div>
-
-<aura:if isTrue = "{!v.showEdit}">
-    <c:auraEditPerson/>
-</aura:if>
-<aura:if isTrue = "{!v.showCreate}">
-    <c:auraCreatePerson/>
-</aura:if>
 
 <div class="slds-m-around_medium">
     <lightning:button  variant = "Neutral" label="New Person" title="Create new Person record" class="slds-float_right" 

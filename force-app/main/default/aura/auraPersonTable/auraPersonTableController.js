@@ -27,7 +27,7 @@
 
         switch (action.name) {
             case 'edit':
-                helper.editPerson(cmp, row);
+                helper.createComponent(cmp, event, "c:auraEditPerson", {recordId: row.Id, personName: row.Name});
                 break;
             case 'urlredirect':
                 var recordId = row.Id;
@@ -37,16 +37,32 @@
         }
     },
 
-    closeEdit : function(component, event, helper){
-        var showEditValue = event.getParam("showEdit");
-        helper.changeShowEditValue(component, showEditValue);
-    },
-
     createNewPerson : function(component, event, helper){
-        helper.changeShowCreateValue(component, true);
-    },
 
-    closeCreate : function(component, event, helper){
-        helper.changeShowCreateValue(component, false);
+        
+
+        var action = component.get("c.getRecordTypeNames");
+        
+        action.setCallback(this, function(response){
+
+            var recordTypes = response.getReturnValue();
+            
+            var options = [];
+
+            for(var rt in recordTypes){
+
+                options.push({"label" : recordTypes[rt], "value" : recordTypes[rt]});
+
+            }
+
+            helper.createComponent(component, event, "c:auraRecordTypesModal", {options : options});
+            
+        });
+
+        $A.enqueueAction(action);
+       
+        
+
     }
+
 })
