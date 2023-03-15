@@ -1,0 +1,19 @@
+<apex:page controller = "CreatePersonController">
+    <apex:form>
+        <apex:pageBlock title="Create a New {!recordType} Record">
+            <apex:pageMessages id="showmsg"></apex:pageMessages>
+        <apex:pageBlockSection>
+
+            <apex:repeat value = "{!keys}" var = "key">
+
+                <apex:inputText value = "{!fields[key]}" label="{!key}"/>
+
+            </apex:repeat>
+
+        </apex:pageBlockSection>
+        <apex:pageBlockButtons>
+            <apex:commandButton action="{! save }" value="Save"/>
+        </apex:pageBlockButtons>
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

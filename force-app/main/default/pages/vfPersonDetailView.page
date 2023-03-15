@@ -1,0 +1,5 @@
+<apex:page controller = "PersonDetailViewController">
+
+<apex:detail/>
+
+</apex:page>

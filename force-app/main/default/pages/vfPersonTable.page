@@ -1,5 +1,38 @@
 <apex:page controller = "PersonTableController">
 
+<style type="text/css">
+    .customPopup{
+         background-color: white;
+         border-style: solid;
+         padding-right: 5px;
+         left: 50%;
+         position: absolute;
+         z-index: 9999;
+         width: 800px;
+         height: 250px;
+         margin-left: -400px;
+         top:100px;
+     }
+
+     .customPopup iframe{
+         width: 100%;
+         height: 100%;
+     }
+ </style> 
+
+    <apex:outputPanel id = "createPersonPanel" styleClass="customPopup" layout="block" rendered="{!showCreateForm}">
+        <iframe src="apex/vfCreatePerson?recordType={!selectedRecordType}"></iframe>
+        <apex:form>
+            <apex:commandButton value="Cancel" action="{!closeCreateForm}"/>
+        </apex:form>
+    </apex:outputPanel>
+
+
+<apex:form rendered = "{!showCreateButtons}">
+    <apex:commandButton action="{!createTutor}" value="Create Tutor" id="tutorButton"/>
+    <apex:commandButton action="{!createStudent}" value="Create Student" id="studentButton"/>
+</apex:form>
+
 <apex:pageBlock title="Person Records">
 
    <apex:pageBlockTable value="{!persons}" var="p">
@@ -16,7 +49,7 @@
         </apex:outputLink>
     </apex:column>
 
-      <apex:column headerValue="Name"><apex:outputLink value = "/{!p.Id}">{!p.Name}</apex:outputLink></apex:column>
+      <apex:column headerValue="Name"><apex:outputLink value = "/apex/vfPersonDetailView?id={!p.Id}">{!p.Name}</apex:outputLink></apex:column>
       <apex:column value="{!p.Record_Type_Name__c}"/>
       <apex:column value="{!p.Phone__c}"/>
       <apex:column value="{!p.Email__c}"/>
