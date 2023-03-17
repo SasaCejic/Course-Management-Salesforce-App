@@ -1,5 +1,19 @@
-<apex:page controller = "PersonDetailViewController">
+<apex:page standardController="Person__c" extensions="PersonDetailController">
+    
+    <style type = "text/css">
+        .btn{
+            display: none;
+        }
+    </style>
+
+<apex:pageBlock>
+
+<apex:outputLink value = "/apex/vfPersonTable">Back to Person Table Page</apex:outputLink>
+
+<apex:pageMessages id="showmsg"></apex:pageMessages>
 
 <apex:detail/>
+
+</apex:pageBlock>
 
 </apex:page>
