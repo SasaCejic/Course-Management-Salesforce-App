@@ -52,4 +52,44 @@ public with sharing class PersonTableControllerTest {
 
     }
 
+
+    @isTest
+    static void createTutor_shouldReturnValidPageReference(){
+        
+        Test.startTest();
+
+        PersonTableController ptc = new PersonTableController();
+
+        PageReference actual = ptc.createTutor();
+
+        Test.stopTest();
+
+        PageReference expected = new PageReference('/apex/vfCreatePerson?recordType=Tutor');
+        expected.setRedirect(true);
+
+
+        System.assertEquals(expected.getUrl(), actual.getUrl());
+
+    }
+
+    @isTest
+    static void createStudent_shouldReturnValidPageReference(){
+        
+        Test.startTest();
+
+        PersonTableController ptc = new PersonTableController();
+
+        PageReference actual = ptc.createStudent();
+
+        Test.stopTest();
+
+        PageReference expected = new PageReference('/apex/vfCreatePerson?recordType=Student');
+        expected.setRedirect(true);
+
+
+        System.assertEquals(expected.getUrl(), actual.getUrl());
+
+    }
+
+
 }
