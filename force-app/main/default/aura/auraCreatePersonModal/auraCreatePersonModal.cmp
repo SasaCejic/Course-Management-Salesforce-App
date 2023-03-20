@@ -1,0 +1,22 @@
+<aura:component controller = "PersonController" implements = "flexipage:availableForAllPageTypes, force:hasRecordId, force:appHostable" access = "global">
+
+<aura:attribute name = "selectedRecordTypeId" type = "String"/>
+
+<lightning:overlayLibrary aura:id="overlayLib"/>
+
+<lightning:navigation aura:id="navService"/>
+
+            <lightning:recordForm
+                aura:id = "myRecordCreateForm"
+                objectApiName="Person__c"
+                recordTypeId = "{!v.selectedRecordTypeId}"
+                layoutType = "Full"
+                columns="2"
+                oncancel = "{!c.closeModal}"
+                onerror = "{!c.handleError}"
+                onsuccess="{!c.handleSuccess}"
+                onsubmit="{!c.onSubmitHandler}"
+            >
+            </lightning:recordForm>
+
+</aura:component>	

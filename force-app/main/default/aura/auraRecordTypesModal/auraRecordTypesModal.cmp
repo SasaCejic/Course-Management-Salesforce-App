@@ -1,0 +1,20 @@
+<aura:component  controller = "PersonController" implements = "flexipage:availableForAllPageTypes, force:hasRecordId, force:appHostable" access = "global">
+
+<aura:attribute name="options" type="List"/>
+<aura:attribute name = "selectedRecordTypeName" type = "String" default = "Tutor"/>
+
+<lightning:overlayLibrary aura:id="overlayLib"/>
+
+        <lightning:radioGroup name="radioGroup"
+                          label="Record Type"
+                          options="{! v.options }"
+                          value="{! v.selectedRecordTypeName }"
+                          type="radio"/>
+             
+        <div class="slds-m-around_medium">
+            <lightning:button label="Next" title="Next" class="slds-float_right" 
+                onclick = "{!c.next}">
+            </lightning:button>
+        </div>
+        
+</aura:component>	

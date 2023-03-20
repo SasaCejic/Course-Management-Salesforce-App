@@ -6,7 +6,7 @@ public with sharing class PersonDataServiceTest {
 
         Test.startTest();
 
-        List<Person__c> persons = PersonDataService.getData('', 0);
+        List<Person__c> persons = PersonDataService.getData('', 0, null);
 
         Test.stopTest();
 
@@ -31,7 +31,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('', 0);
+        List<Person__c> persons = PersonDataService.getData('', 0, null);
 
         Test.stopTest();
 
@@ -71,7 +71,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('Smith Manison', 0);
+        List<Person__c> persons = PersonDataService.getData('Smith Manison', 0, null);
 
         Test.stopTest();
 
@@ -98,7 +98,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('+382 908837', 0);
+        List<Person__c> persons = PersonDataService.getData('+382 908837', 0, null);
 
         Test.stopTest();
 
@@ -126,7 +126,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('stow@gmail.com', 0);
+        List<Person__c> persons = PersonDataService.getData('stow@gmail.com', 0, null);
 
         Test.stopTest();
 
@@ -154,7 +154,7 @@ public with sharing class PersonDataServiceTest {
 
         insert createdPersons;
 
-        List<Person__c> persons = PersonDataService.getData('gmail', 1);
+        List<Person__c> persons = PersonDataService.getData('gmail', 1, 10);
 
         Test.stopTest();
 
@@ -169,6 +169,117 @@ public with sharing class PersonDataServiceTest {
         system.assert(personIds.contains(createdPersons[2].Id));
 
 
+   }
+
+
+   @isTest
+   static void getData_shouldReturnTwoRecords_ifThreeRecordEmailsMatchSearchParametersAndLimitValueIsTwo(){
+
+        Person__c person1 = new Person__c(Name = 'Smith Manison', First_Name__c = 'Smith', Last_Name__c = 'Manison', Email__c = 'sth@gmail.com');
+        Person__c person2 = new Person__c(Name = 'Mike Hopkins', First_Name__c = 'Mike', Last_Name__c = 'Hopkins', Email__c = 'hpkns@gmail.com');
+        Person__c person3 = new Person__c(Name = 'Steve Owen', First_Name__c = 'Steve', Last_Name__c = 'Owen', Email__c = 'stow@gmail.com');
+
+        List<Person__c> createdPersons = new List<Person__c>();
+
+        createdPersons.add(person1);
+        createdPersons.add(person2);
+        createdPersons.add(person3);
+        createdPersons.sort();
+
+        Test.startTest();
+
+        insert createdPersons;
+
+        List<Person__c> persons = PersonDataService.getData('gmail', null, 2);
+
+        Test.stopTest();
+
+        System.assertEquals(2, persons.size());
+
+        List<String> personIds  = new List<String>();
+
+        for(Person__c p : persons){
+          personIds.add(p.Id);
+        }
+        system.assert(personIds.contains(createdPersons[0].Id));
+        system.assert(personIds.contains(createdPersons[1].Id));
+
+
+   }
+
+   @isTest
+   static void getRecordTypeId_shouldReturnTutorRecordTypeId_IfNameParameterIsNull(){
+
+          String expected = Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Tutor').getRecordTypeId();
+
+          Test.startTest();
+
+          String actual = PersonDataService.getRecordTypeId(null);
+
+          Test.stopTest();
+
+          System.assertEquals(expected, actual);
+
+   }
+
+   @isTest
+   static void getRecordTypeId_shouldReturnTutorRecordTypeId_IfNameParameterIsNeitherTutorOrStudent(){
+
+          String expected = Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Tutor').getRecordTypeId();
+
+          Test.startTest();
+
+          String actual = PersonDataService.getRecordTypeId('RecordType');
+
+          Test.stopTest();
+
+          System.assertEquals(expected, actual);
+
+   }
+
+
+   @isTest
+   static void getRecordTypeId_shouldReturnTutorRecordTypeId_IfNameParameterIsTutor(){
+
+          String expected = Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Tutor').getRecordTypeId();
+
+          Test.startTest();
+
+          String actual = PersonDataService.getRecordTypeId('Tutor');
+
+          Test.stopTest();
+
+          System.assertEquals(expected, actual);
+
+   }
+
+   @isTest
+   static void getRecordTypeId_shouldReturnStudentRecordTypeId_IfNameParameterIsStudent(){
+
+          String expected = Schema.SObjectType.Person__c.getRecordTypeInfosByName().get('Student').getRecordTypeId();
+
+          Test.startTest();
+
+          String actual = PersonDataService.getRecordTypeId('Student');
+
+          Test.stopTest();
+
+          System.assertEquals(expected, actual);
+
+   }
+
+   @isTest
+   static void getRecordTypeNames_shouldReturnTutorAndStudent(){
+     List<String> expected = new List<String>{'Tutor', 'Student'};
+     expected.sort();
+
+     Test.startTest();
+
+     List<String> actual = PersonDataService.getRecordTypeNames();
+
+     Test.stopTest();
+
+     System.assertEquals(expected, actual);
    }
 
 

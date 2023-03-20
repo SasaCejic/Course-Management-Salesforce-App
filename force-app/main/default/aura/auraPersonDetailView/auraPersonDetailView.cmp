@@ -1,0 +1,17 @@
+<aura:component controller = "PersonController" implements = "force:appHostable, force:hasRecordId, flexipage:availableForAllPageTypes, lightning:isUrlAddressable" access = "global">
+
+<aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+<lightning:card>
+
+    <lightning:recordForm
+        recordId="{!v.recordId}"
+        objectApiName="Person__c"
+        layoutType="Full"
+        columns="2"
+        mode="readonly"
+    />
+
+</lightning:card>
+
+</aura:component>	

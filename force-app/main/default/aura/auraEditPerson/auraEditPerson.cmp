@@ -1,0 +1,27 @@
+<aura:component implements = "flexipage:availableForAllPageTypes, force:hasRecordId" access = "global">
+
+<!-- handlers -->
+<aura:handler name = "init" value = "{! this }" action = "{! c.init}"/>
+
+<!-- attributes -->
+<aura:attribute name = "recordId" type = "String"/>
+<aura:attribute name = "personName" type = "String"/>
+
+<lightning:navigation aura:id="navService"/>
+
+<lightning:overlayLibrary aura:id="overlayLib"/>
+            
+                <lightning:recordForm
+                   aura:id = "myRecordForm"
+                   recordId="{!v.recordId}"
+                   objectApiName="Person__c"
+                   layoutType = "Full"
+                   columns="2"
+                   mode="edit"
+                   oncancel = "{!c.closeModal}"
+                   onerror = "{!c.handleError}"
+                   onsuccess="{!c.handleSuccess}">
+                </lightning:recordForm>
+           
+
+</aura:component>	
