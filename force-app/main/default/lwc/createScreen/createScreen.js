@@ -1,75 +1,15 @@
-import { LightningElement, track, wire } from 'lwc';
-import { getObjectInfo } from 'lightning/uiObjectInfoApi';
-import PERSON_OBJECT from '@salesforce/schema/Person__c';
-export default class CreateScreen extends LightningElement {
+import { LightningElement, api } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import {NavigationMixin} from 'lightning/navigation';
 
-    showRecordTypePanel = true;
+export default class CreateScreen extends NavigationMixin(LightningElement) {
 
     createdRecordName;
 
+    @api selectedRecordTypeId;
 
-    tutorRecordTypeId;
-    studentRecordTypeId;
-
-    @track recordTypeValue = 'Tutor';
-
-    selectedRecordTypeId;
-
-    @wire(getObjectInfo, { objectApiName: PERSON_OBJECT })
-    objectInfo;
-
-    setRecordTypeIds() {
-
-        const rtis = this.objectInfo.data.recordTypeInfos;
-
-        this.tutorRecordTypeId = Object.keys(rtis).find(rti => rtis[rti].name === 'Tutor');
-
-        this.studentRecordTypeId = Object.keys(rtis).find(rti => rtis[rti].name === 'Student');
-    }
-
-    connectedCallback(){
-        this.setRecordTypeIds();
-    }
-
-
-    get recordTypeOptions() {
-        return [
-            { label: 'Tutor', value: 'Tutor' },
-            { label: 'Student', value: 'Student' },
-        ];
-    }
-
-    changeRecordTypeValue(event){
-        this.recordTypeValue = (this.recordTypeValue == 'Tutor') ? 'Student' : 'Tutor';
-        this.selectedRecordTypeId = (this.recordTypeValue == 'Tutor') ? this.tutorRecordTypeId : this.studentRecordTypeId;
-    }
-
-
-
-    sendCreateScreenValue(event){
-        this.dispatchEvent(
-            new CustomEvent('closecreatescreen')
-        );
-    }
-
-    sendCreateErrorMessage(event){
-        this.dispatchEvent(
-            new CustomEvent('createerrormessage')
-        );
-    }
-
-    sendCreateHandleSuccess(event){
-        this.dispatchEvent(
-            new CustomEvent('successcreate', {detail: {recordId : event.detail.id, recordName : this.createdRecordName}})
-        );
-    }
-
-    hideRecordTypePanel(){
-        this.showRecordTypePanel = false;
-
-        if(typeof this.selectedRecordTypeId === 'undefined'){
-            this.selectedRecordTypeId = this.tutorRecordTypeId;
-        }
+    goBack(event){
+        window.history.back();
     }
 
     onSubmitHandler(event){
@@ -88,6 +28,37 @@ export default class CreateScreen extends LightningElement {
     
     this.template
         .querySelector('lightning-record-form').submit(fields);
+    }
+
+    showErrorMessage(event){
+        this.toast('Error', 'Record cannot be created', 'error', 'dismissable');
+    }
+
+    showSuccessMessage(event){
+        this.toast('Success', `Record "${this.createdRecordName}" has been created successfully`, 'success', 'dismissable');
+        this.navigate('standard__recordPage', event.detail.id, 'Person__c', 'view');
+    }
+
+    navigate(type, recordId, objectApiName, actionName){
+        this[NavigationMixin.Navigate]({
+            type: type,
+            attributes:{
+                recordId: recordId,
+                objectApiName: objectApiName,
+                actionName: actionName
+            }
+        });
+    }
+
+    toast(title, message, variant, mode){
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title: title,
+                message: message,
+                variant: variant,
+                mode: mode
+            })
+        );
     }
 
 }
