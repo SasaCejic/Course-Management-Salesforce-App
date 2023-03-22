@@ -5,6 +5,9 @@
 // You can also execute the entire file by running the command:
 //     SFDX: Execute Anonymous Apex with Editor Contents
 
-string tempvar = 'Enter_your_name_here';
-System.debug('Hello World!');
-System.debug('My name is ' + tempvar);
+Map<String, Schema.SObjectType> detail = Schema.getGlobalDescribe();
+for(Schema.SObjectField fields :detail.get('Person__c').getDescribe().fields.getMap().Values()) {
+    if(String.valueOf(fields.getDescribe().getType()).equals('PHONE')){
+        System.debug('Field:  '+ fields.getDescribe().getName());
+    }
+}
