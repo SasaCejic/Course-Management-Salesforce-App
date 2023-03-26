@@ -14,6 +14,10 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>CustomMetadataFetcher</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>EditPersonController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -79,6 +83,14 @@
     </classAccesses>
     <classAccesses>
         <apexClass>PersonTriggerTest</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PhoneFieldNamesPicklist</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PhoneFieldNamesPicklistTest</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>

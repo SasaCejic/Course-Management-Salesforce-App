@@ -1,3 +1,21 @@
 <template>
-    {phoneFieldName}
+    <template if:true = {fieldVisible}>
+    <lightning-card  title = {title}>
+        <lightning-record-form
+            object-api-name="Person__c"
+            record-id={recordId}
+            fields={fieldsToShow}
+        >
+        </lightning-record-form>
+        <lightning-button label = "Validate" onclick={validate}></lightning-button>
+    </lightning-card>
+    <template for:each={validatedPhones} for:item="validatedPhone">
+        <lightning-layout-item key = {validatedPhone}>
+            <c-validation-screen phone = {validatedPhone} numbervalidationkey = {numberValidationKey.data}></c-validation-screen></br>
+        </lightning-layout-item>
+    </template>
+    </template>
+    <template if:false = {fieldVisible}>
+        <p>Component cannot be loaded because you don't have the view field access</p>
+    </template>
 </template>
