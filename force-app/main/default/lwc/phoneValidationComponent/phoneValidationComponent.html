@@ -1,34 +1,36 @@
 <template>
-    <template lwc:if = {recordId} >
-    <template lwc:if = {fieldVisible}>
-    <lightning-card  title = {title}>
-        <lightning-record-form
-            object-api-name="Person__c"
-            record-id={recordId}
-            fields={fieldsToShow}
-        >
-        </lightning-record-form>
-        <lightning-button label = "Validate" onclick={validate}></lightning-button>
-    </lightning-card>
-    <template for:each={validatedPhones} for:item="validatedPhone">
-        <lightning-layout-item key = {validatedPhone}>
-            <c-validation-screen phone = {validatedPhone} numbervalidationkey = {numberValidationKey.data}></c-validation-screen></br>
-        </lightning-layout-item>
-    </template>
-    </template>
-    <template lwc:else>
-        <p>Component cannot be loaded because you don't have the view field access</p>
-    </template>
-    </template>
-    <template lwc:else>
-        <lightning-card  title = {title}>
-            <lightning-input type="tel" label={phoneFieldName} name="phoneInput" value = {phoneValue} ></lightning-input>
-            <lightning-button label = "Validate" onclick={validate}></lightning-button>
-        </lightning-card>
-        <template for:each={validatedPhones} for:item="validatedPhone">
-            <lightning-layout-item key = {validatedPhone}>
-                <c-validation-screen phone = {validatedPhone} numbervalidationkey = {numberValidationKey.data}></c-validation-screen></br>
-            </lightning-layout-item>
+    <template lwc:if = {hasComponentAccess}>
+        <template lwc:if = {recordId} >
+            <template lwc:if = {fieldVisible}>
+                <lightning-card  title = {title}>
+                    <lightning-record-form
+                        object-api-name="Person__c"
+                        record-id={recordId}
+                        fields={fieldsToShow}
+                    >
+                    </lightning-record-form>
+                    <lightning-button label = "Validate" onclick={validate}></lightning-button>
+                </lightning-card>
+                <template for:each={validatedPhones} for:item="validatedPhone">
+                    <lightning-layout-item key = {validatedPhone}>
+                        <c-validation-screen phone = {validatedPhone} numbervalidationkey = {numberValidationKey.data}></c-validation-screen></br>
+                    </lightning-layout-item>
+                </template>
+            </template>
+            <template lwc:else>
+                <p>Component cannot be loaded because you don't have the view field access</p>
+            </template>
+        </template>
+        <template lwc:else>
+            <lightning-card  title = {title}>
+                <lightning-input type="tel" label={phoneFieldName} name="phoneInput" value = {phoneValue} ></lightning-input>
+                <lightning-button label = "Validate" onclick={validate}></lightning-button>
+            </lightning-card>
+            <template for:each={validatedPhones} for:item="validatedPhone">
+                <lightning-layout-item key = {validatedPhone}>
+                    <c-validation-screen phone = {validatedPhone} numbervalidationkey = {numberValidationKey.data}></c-validation-screen></br>
+                </lightning-layout-item>
+            </template>
         </template>
     </template>
 </template>

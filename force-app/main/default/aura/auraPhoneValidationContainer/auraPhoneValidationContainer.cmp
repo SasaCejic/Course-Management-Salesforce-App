@@ -1,12 +1,8 @@
 <aura:component implements="force:appHostable,force:hasRecordId,flexipage:availableForAllPageTypes"
-access="global" controller = "PermissionChecker">
-    <aura:handler name="init" value="{!this}" action="{!c.checkPermission}" />
+access="global">
     <aura:handler name="change" value="{!v.recordId}" action="{!c.onRecordIdChange}"/>
-    <aura:attribute name="hasPermission" type="Boolean"/>
     <aura:attribute name="phoneFieldName" type = "String" />
 
-    <aura:if isTrue = "{!v.hasPermission}">
-        <c:phoneValidationComponent recordId="{!v.recordId}" phoneFieldName = "{!v.phoneFieldName}"></c:phoneValidationComponent>
-    </aura:if>
+    <c:phoneValidationComponent recordId="{!v.recordId}" phoneFieldName = "{!v.phoneFieldName}"></c:phoneValidationComponent>
 
 </aura:component>

@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import getNumberValidationKey from '@salesforce/apex/CustomMetadataFetcher.getNumberValidationKey';
+import hasPermission from '@salesforce/customPermission/Access_Phone_Validation_Component';
 
 export default class PhoneValidationComponent extends LightningElement {
     @api phoneFieldName;
@@ -19,6 +20,10 @@ export default class PhoneValidationComponent extends LightningElement {
         this.title = `${this.phoneFieldName} Validation Component`;
         this.fieldsToRetrieve = [`Person__c.${this.phoneFieldName}`];
         this.fieldsToShow = [this.phoneFieldName];
+    }
+
+    get hasComponentAccess(){
+        return hasPermission;
     }
 
 
