@@ -1,0 +1,14 @@
+<template>
+    <lightning-card  title={phone}>
+        <lightning-button label = {detialsButtonTitle} onclick={viewOrHideDetails} slot = "actions"></lightning-button>
+        <template if:true = {showResultTable}>
+            <lightning-datatable
+                key-field = "Id"
+                columns = {columns}
+                data={response}
+                hide-checkbox-column
+            >
+           </lightning-datatable>
+        </template>
+    </lightning-card>
+</template>

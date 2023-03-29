@@ -14,6 +14,14 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>CustomMetadataFetcher</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CustomMetadataFetcherTest</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>EditPersonController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -27,6 +35,14 @@
     </classAccesses>
     <classAccesses>
         <apexClass>JSON2Apex</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PermissionChecker</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PermissionCheckerTest</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -79,6 +95,14 @@
     </classAccesses>
     <classAccesses>
         <apexClass>PersonTriggerTest</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PhoneFieldNamesPicklist</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PhoneFieldNamesPicklistTest</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
