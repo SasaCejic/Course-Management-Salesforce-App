@@ -5,5 +5,12 @@
 // You can also execute the entire file by running the command:
 //     SFDX: Execute Anonymous Apex with Editor Contents
 
-String validationKey = Number_Validation_API_Key__mdt.getInstance('Validation_Key').Key__c;
-System.debug(validationKey);
+// Boolean hasPermission = FeatureManagement.checkPermission('Access_Phone_Validation_Component');
+// System.debug(hasPermission);
+
+PermissionSet ps = [SELECT Id, Name FROM PermissionSet WHERE Name = 'Access_Phone_Validation_Component_PS' LIMIT 1];
+
+// system.debug(ps.Id);
+
+PermissionSetAssignment psa = [SELECT Id FROM PermissionSetAssignment WHERE PermissionSetId = :ps.Id AND AssigneeId = :UserInfo.getUserId() LIMIT 1];
+system.debug(psa.Id);

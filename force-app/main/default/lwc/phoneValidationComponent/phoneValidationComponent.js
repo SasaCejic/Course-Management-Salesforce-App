@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import getNumberValidationKey from '@salesforce/apex/CustomMetadataFetcher.getNumberValidationKey';
+import hasPermission from '@salesforce/customPermission/Access_Phone_Validation_Component';
 
 export default class PhoneValidationComponent extends LightningElement {
     @api phoneFieldName;
@@ -13,6 +14,7 @@ export default class PhoneValidationComponent extends LightningElement {
     fieldsToShow;
     @wire(getNumberValidationKey)
     numberValidationKey;
+    phoneValue;
 
     connectedCallback(){
         this.title = `${this.phoneFieldName} Validation Component`;
@@ -20,9 +22,16 @@ export default class PhoneValidationComponent extends LightningElement {
         this.fieldsToShow = [this.phoneFieldName];
     }
 
+    get hasComponentAccess(){
+        return hasPermission;
+    }
+
 
     get phoneValue(){
-        return this.person.data ? getFieldValue(this.person.data.fields, this.fieldsToRetrieve[0])[this.phoneFieldName].value : 'no data';
+        if(!this.recordId){
+            return this.template.querySelector("lightning-input").value;
+        }
+        return this.person.data ? getFieldValue(this.person.data.fields, this.fieldsToRetrieve[0])[this.phoneFieldName].value : '';
     }
 
     get fieldVisible(){
@@ -34,7 +43,15 @@ export default class PhoneValidationComponent extends LightningElement {
     }
 
     validate(){
-        this.validatedPhones = (!this.validatedPhones.includes(this.phoneValue)) ? [...this.validatedPhones, this.phoneValue] : this.validatedPhones;
+        let result = true;
+        if(!this.recordId){
+            this.phoneValue = this.template.querySelector("lightning-input").value;
+            let pattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+            result = pattern.test(this.phoneValue);
+        }else{
+            this.phoneValue = this.person.data ? getFieldValue(this.person.data.fields, this.fieldsToRetrieve[0])[this.phoneFieldName].value : '';
+        }
+        this.validatedPhones = (!this.validatedPhones.includes(this.phoneValue) && result) ? [...this.validatedPhones, this.phoneValue] : this.validatedPhones;
     }
 
 }

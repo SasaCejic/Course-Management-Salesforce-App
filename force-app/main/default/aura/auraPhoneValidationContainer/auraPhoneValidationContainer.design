@@ -1,0 +1,3 @@
+<design:component >
+    <design:attribute name="phoneFieldName" label="Phone Field" datasource="apex://PhoneFieldNamesPicklist"/>
+</design:component>
